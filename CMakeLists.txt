@@ -1,5 +1,7 @@
-project(cuda-toy)
+cmake_minimum_required(VERSION 3.16)
 
-include_directories(include)
+project(cuda-toy LANGUAGES CXX)
 
-add_executable(cuda-toy src/main.cpp src/matrix.cpp)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+add_subdirectory(src)
