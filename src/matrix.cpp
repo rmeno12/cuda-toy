@@ -4,8 +4,9 @@
 
 Matrix::Matrix(size_t rows, size_t cols) : rows(rows), cols(cols) {
   mat.resize(rows);
-  for (auto i : mat) {
-    i.resize(cols);
+  for (auto i = 0; i < rows; i++) {
+    mat[i] = {};
+    mat[i].resize(cols);
   }
 }
 
