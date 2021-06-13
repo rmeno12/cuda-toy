@@ -36,7 +36,7 @@ Matrix LinearReluLayer::activate(Matrix input) {
   Matrix out(size, 1);
 
   for (auto i = 0; i < size; i++) {
-    out(i, 1) = input(i, 1) > 0 ? input(i, 1) : 0;
+    out(i, 0) = input(i, 0) > 0 ? input(i, 1) : 0;
   }
 
   return out;
