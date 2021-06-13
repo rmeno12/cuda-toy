@@ -8,7 +8,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update \
     && apt-get install git -y \
     && apt-get install -y --no-install-recommends cuda-samples-11-3 \
-    && apt-get install -y cmake protobuf-compiler
+    && apt-get install -y cmake protobuf-compiler \
+    && apt-get install gdb -y
 
 # Set up a user so we're not just in root
 ARG USERNAME=dev
