@@ -47,6 +47,9 @@ class LinearLayer {
     weights = weights - (error * inp.transpose()) * learning_rate;
     biases = biases - error * learning_rate;
   }
+
+  Matrix get_weights() { return weights; }
+  Matrix get_error() { return error; }
 };
 
 #endif

@@ -4,4 +4,5 @@ add_executable(
   matrix.cpp
   linear_relu_layer.cpp
   linear_softmax_layer.cpp
+  model.cpp
 )
