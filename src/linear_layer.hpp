@@ -1,5 +1,5 @@
-#ifndef LINEAR_LAYER_H
-#define LINEAR_LAYER_H
+#ifndef LINEAR_LAYER_HPP
+#define LINEAR_LAYER_HPP
 
 #include "matrix.hpp"
 

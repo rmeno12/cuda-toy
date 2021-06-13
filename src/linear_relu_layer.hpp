@@ -1,5 +1,5 @@
-#ifndef LINEAR_RELU_LAYER_H
-#define LINEAR_RELU_LAYER_H
+#ifndef LINEAR_RELU_LAYER_HPP
+#define LINEAR_RELU_LAYER_HPP
 
 #include "linear_layer.hpp"
 

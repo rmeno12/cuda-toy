@@ -1,5 +1,5 @@
-#ifndef LINEAR_SOFTMAX_LAYER_H
-#define LINEAR_SOFTMAX_LAYER_H
+#ifndef LINEAR_SOFTMAX_LAYER_HPP
+#define LINEAR_SOFTMAX_LAYER_HPP
 
 #include "linear_layer.hpp"
 
