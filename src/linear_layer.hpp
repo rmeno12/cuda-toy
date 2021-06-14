@@ -6,8 +6,8 @@
 class LinearLayer {
  private:
   virtual void initialize_weights() {
-    for (auto i = 0; i < input_size; i++) {
-      for (auto j = 0; i < size; i++) {
+    for (auto i = 0; i < size; i++) {
+      for (auto j = 0; j < input_size; j++) {
         weights(i, j) = 0.0;
       }
     }
@@ -28,7 +28,7 @@ class LinearLayer {
   LinearLayer(size_t input_size, size_t size)
       : input_size(input_size),
         size(size),
-        weights(input_size, size),
+        weights(size, input_size),
         biases(size, 1),
         inp(input_size, 1),
         z(size, 1),

@@ -1,5 +1,7 @@
 #include "matrix.hpp"
 
+#include <iostream>
+#include <limits>
 #include <stdexcept>
 
 Matrix::Matrix(size_t rows, size_t cols) : rows(rows), cols(cols) {
@@ -16,17 +18,34 @@ Matrix::Matrix(const Matrix& rhs) {
   cols = rhs.cols;
 }
 
+Matrix::Matrix(std::vector<float> vals, size_t rows, size_t cols)
+    : rows(rows), cols(cols) {
+  if (rows * cols != vals.size()) {
+    throw;
+  }
+
+  mat.resize(rows);
+  for (auto i = 0; i < rows; i++) {
+    mat[i] = {};
+    mat[i].resize(cols);
+  }
+
+  for (auto i = 0; i < rows; i++) {
+    for (auto j = 0; j < cols; j++) {
+      mat[i][j] = vals[i * cols + j];
+    }
+  }
+}
+
 Matrix& Matrix::operator=(const Matrix& rhs) {
   if (this == &rhs) return *this;
 
-  if (rows != rhs.rows) {
-    mat.resize(rhs.rows);
-  }
-
-  if (cols != rhs.cols) {
-    for (auto i : mat) {
-      i.resize(rhs.cols);
-    }
+  rows = rhs.rows;
+  cols = rhs.cols;
+  mat.resize(rows);
+  for (auto i = 0; i < rows; i++) {
+    mat[i] = {};
+    mat[i].resize(cols);
   }
 
   for (size_t i = 0; i < rhs.rows; i++) {
@@ -73,7 +92,7 @@ Matrix Matrix::operator-(Matrix rhs) {
 }
 
 Matrix Matrix::operator*(Matrix rhs) {
-  if (rhs.cols != rows) {
+  if (cols != rhs.rows) {
     throw std::invalid_argument(
         "Matrices must have the same inner dimensions (i.e. (a, b) * (b, c)");
   }
@@ -106,7 +125,7 @@ Matrix Matrix::operator*(float rhs) {
 
 float& Matrix::operator()(size_t i, size_t j) {
   if (i >= rows || j >= cols) {
-    throw;
+    throw "Trying to access matrix out of bounds";
   }
 
   return mat[i][j];
@@ -143,10 +162,31 @@ Matrix Matrix::hadamard_product(Matrix rhs) {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       out(i, j) = mat[i][j] * rhs(i, j);
+      if (out(i, j) != out(i, j)) {
+        out(i, j) = std::numeric_limits<float>::infinity();
+      }
     }
   }
 
   return out;
+}
+
+void Matrix::print() {
+  std::cout << "{ ";
+  for (auto i = 0; i < rows; i++) {
+    if (i > 0) {
+      std::cout << "  ";
+    }
+    std::cout << "{";
+    for (auto j = 0; j < cols; j++) {
+      std::cout << " " << mat[i][j];
+    }
+    std::cout << " }";
+    if (i + 1 < rows) {
+      std::cout << "\n";
+    }
+  }
+  std::cout << " }\n\n";
 }
 
 size_t Matrix::get_rows() { return rows; }
