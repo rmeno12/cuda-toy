@@ -9,19 +9,19 @@ class Matrix {
   size_t rows, cols;
 
  public:
-  Matrix(size_t, size_t);
-  Matrix(const Matrix&);
-  Matrix(std::vector<float>, size_t, size_t);
-  Matrix& operator=(const Matrix&);
+  Matrix(size_t rows, size_t cols);
+  Matrix(const Matrix& rhs);
+  Matrix(std::vector<float> vals, size_t rows, size_t cols);
+  Matrix& operator=(const Matrix& rhs);
 
-  Matrix operator+(Matrix);
-  Matrix operator-(Matrix);
-  Matrix operator*(Matrix);
-  Matrix operator*(float);
-  float& operator()(size_t, size_t);
-  float operator()(size_t, size_t) const;
+  Matrix operator+(Matrix rhs);
+  Matrix operator-(Matrix rhs);
+  Matrix operator*(Matrix rhs);
+  Matrix operator*(float rhs);
+  float& operator()(size_t i, size_t j);
+  float operator()(size_t i, size_t j) const;
   Matrix transpose();
-  Matrix hadamard_product(Matrix);
+  Matrix hadamard_product(Matrix rhs);
   Matrix collapse_horizontal_avg();
 
   void print();

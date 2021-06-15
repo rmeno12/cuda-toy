@@ -17,7 +17,7 @@ class LinearLayer {
       biases(i, 0) = 0.0;
     }
   }
-  virtual Matrix activate(Matrix) = 0;
+  virtual Matrix activate(Matrix input) = 0;
 
  protected:
   Matrix weights, biases;
@@ -42,7 +42,7 @@ class LinearLayer {
     z = weights * input + biases;
     return activate(z);
   }
-  virtual Matrix backprop(Matrix, Matrix) = 0;
+  virtual Matrix backprop(Matrix m1, Matrix m2) = 0;
   virtual void update_params(float learning_rate) {
     weights = weights - (error * inp.transpose()) * learning_rate;
     biases = biases - error.collapse_horizontal_avg() * learning_rate;

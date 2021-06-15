@@ -6,13 +6,13 @@
 class LinearReluLayer : public LinearLayer {
  private:
   void initialize_weights() override;
-  Matrix activate(Matrix) override;
-  static Matrix d_relu(Matrix);
+  Matrix activate(Matrix input) override;
+  static Matrix d_relu(Matrix input);
 
  public:
-  LinearReluLayer(size_t, size_t);
+  LinearReluLayer(size_t input_size, size_t size);
 
-  Matrix backprop(Matrix, Matrix) override;
+  Matrix backprop(Matrix next_weights, Matrix next_error) override;
 };
 
 #endif

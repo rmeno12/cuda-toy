@@ -6,12 +6,12 @@
 class LinearSoftmaxLayer : public LinearLayer {
  private:
   void initialize_weights() override;
-  Matrix activate(Matrix) override;
+  Matrix activate(Matrix input) override;
 
  public:
-  LinearSoftmaxLayer(size_t, size_t);
+  LinearSoftmaxLayer(size_t input_size, size_t size);
 
-  Matrix backprop(Matrix, Matrix) override;
+  Matrix backprop(Matrix activations, Matrix truths) override;
 };
 
 #endif

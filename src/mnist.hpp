@@ -13,9 +13,9 @@ class Mnist {
   std::vector<Matrix> test_images;
   std::vector<Matrix> test_labels;
 
-  std::vector<char> read_bytes(std::string);
-  std::vector<Matrix> read_images(std::string);
-  std::vector<Matrix> read_labels(std::string);
+  std::vector<char> read_bytes(std::string filename);
+  std::vector<Matrix> read_images(std::string filename);
+  std::vector<Matrix> read_labels(std::string filename);
 
  public:
   Mnist(std::string);
