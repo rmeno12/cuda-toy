@@ -58,16 +58,24 @@ Matrix& Matrix::operator=(const Matrix& rhs) {
 }
 
 Matrix Matrix::operator+(Matrix rhs) {
-  if (rhs.rows != rows || rhs.cols != cols) {
+  if (rhs.rows != rows) {
     throw std::invalid_argument(
-        "Matrices must be the same size to be added together.");
+        "Matrices must either be the same size or have the same rows and the "
+        "second matrix have only one column to be added together.");
+  }
+
+  bool expand = false;
+  if (rhs.cols != cols && rhs.cols == 1) {
+    expand = true;
+  } else if (rhs.cols != cols && rhs.cols != 1) {
+    throw;
   }
 
   Matrix out(rows, cols);
 
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] + rhs(i, j);
+      out(i, j) = mat[i][j] + rhs(i, expand ? 0 : j);
     }
   }
 
@@ -166,6 +174,20 @@ Matrix Matrix::hadamard_product(Matrix rhs) {
         out(i, j) = std::numeric_limits<float>::infinity();
       }
     }
+  }
+
+  return out;
+}
+
+Matrix Matrix::collapse_horizontal_avg() {
+  Matrix out(rows, 1);
+
+  for (auto i = 0; i < rows; i++) {
+    float avg = 0;
+    for (auto j = 0; j < cols; j++) {
+      avg += mat[i][j] / cols;
+    }
+    out(i, 0) = avg;
   }
 
   return out;

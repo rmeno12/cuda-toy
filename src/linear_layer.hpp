@@ -45,7 +45,14 @@ class LinearLayer {
   virtual Matrix backprop(Matrix, Matrix) = 0;
   virtual void update_params(float learning_rate) {
     weights = weights - (error * inp.transpose()) * learning_rate;
-    biases = biases - error * learning_rate;
+    biases = biases - error.collapse_horizontal_avg() * learning_rate;
+  }
+  virtual void update_params_batch(float learning_rate) {
+    Matrix collapsed = (error * inp.transpose()).collapse_horizontal_avg();
+    Matrix collapsed_error = error.collapse_horizontal_avg();
+
+    weights = weights - collapsed * learning_rate;
+    biases = biases - collapsed_error * learning_rate;
   }
 
   Matrix get_weights() { return weights; }

@@ -14,6 +14,7 @@ class Model {
   static Matrix matrix_log(Matrix);
   void backprop(Matrix, Matrix);
   void update_params();
+  void update_params_batch();
 
  public:
   Model(float);

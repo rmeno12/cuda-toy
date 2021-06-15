@@ -25,9 +25,11 @@ Matrix LinearSoftmaxLayer::activate(Matrix input) {
     sum += std::exp(input(i, 0));
   }
 
-  Matrix out(input.get_rows(), 1);
+  Matrix out(input.get_rows(), input.get_cols());
   for (auto i = 0; i < input.get_rows(); i++) {
-    out(i, 0) = std::exp(input(i, 0)) / sum;
+    for (auto j = 0; j < input.get_cols(); j++) {
+      out(i, j) = std::exp(input(i, j)) / sum;
+    }
   }
 
   return out;

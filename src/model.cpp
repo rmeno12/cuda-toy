@@ -12,7 +12,8 @@ Model::Model(float learning_rate = 0.01) : learning_rate(learning_rate) {
   // layers.push_back(new LinearReluLayer(128, 64));
   // layers.push_back(new LinearSoftmaxLayer(64, 10));
   layers.push_back(new LinearSigmoidLayer(2, 2));
-  layers.push_back(new LinearSoftmaxLayer(2, 2));
+  layers.push_back(new LinearSigmoidLayer(2, 1));
+  // layers.push_back(new LinearSoftmaxLayer(2, 2));
 }
 
 Matrix Model::make_one_hot(Matrix input) {
@@ -52,15 +53,20 @@ void Model::backprop(Matrix preds, Matrix truths) {
   Matrix m1 = preds;
   Matrix m2 = truths;
   for (int i = layers.size() - 1; i >= 0; i--) {
-    layers[i]->backprop(m1, m2);
+    m2 = layers[i]->backprop(m1, m2);
     m1 = layers[i]->get_weights();
-    m2 = layers[i]->get_error();
   }
 }
 
 void Model::update_params() {
   for (auto layer : layers) {
     layer->update_params(learning_rate);
+  }
+}
+
+void Model::update_params_batch() {
+  for (auto layer : layers) {
+    layer->update_params_batch(learning_rate);
   }
 }
 
@@ -112,4 +118,8 @@ void Model::train_batch(Matrix input, Matrix truths) {
   for (auto layer : layers) {
     prev = layer->feed_forward(prev);
   }
+
+  backprop(prev, truths);
+
+  update_params();
 }

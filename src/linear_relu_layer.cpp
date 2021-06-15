@@ -35,10 +35,12 @@ Matrix LinearReluLayer::d_relu(Matrix input) {
 
 // ReLU activation
 Matrix LinearReluLayer::activate(Matrix input) {
-  Matrix out(size, 1);
+  Matrix out(size, input.get_cols());
 
   for (auto i = 0; i < size; i++) {
-    out(i, 0) = input(i, 0) > 0 ? input(i, 0) : 0;
+    for (auto j = 0; j < input.get_cols(); j++) {
+      out(i, j) = input(i, j) > 0 ? input(i, j) : 0;
+    }
   }
 
   return out;

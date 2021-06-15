@@ -22,6 +22,7 @@ class Matrix {
   float operator()(size_t, size_t) const;
   Matrix transpose();
   Matrix hadamard_product(Matrix);
+  Matrix collapse_horizontal_avg();
 
   void print();
 
