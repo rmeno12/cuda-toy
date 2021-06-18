@@ -28,25 +28,25 @@ int main() {
       Matrix({1}, 1, 1), Matrix({1, 0, 0, 1}, 1, 4),
   };
 
-  float learning_rate = 0.05;
+  float learning_rate = 0.5;
   Model model(learning_rate);
 
   int iters = 500;
   for (int i = 0; i < iters; i++) {
     if (i % 1 == 0) {
-      // float avg = 0;
-      // for (int j = 0; j < training_data.size(); j++) {
-      //   avg += model.rmse(training_data[j], training_labels[j]) /
-      //          training_data.size();
-      // }
-      float avg = model.rmse(training_data[1], training_labels[1]);
+      float avg = 0;
+      for (int j = 0; j < training_data.size(); j++) {
+        avg += model.rmse(training_data[j], training_labels[j]) /
+               training_data.size();
+      }
+      // float avg = model.rmse(training_data[1], training_labels[1]);
       std::cout << "iter " << i << " cost " << avg << std::endl;
     }
     // for (int j = 0; j < training_data.size(); j++) {
     //   model.train(training_data[j], training_labels[j]);
     // }
-    model.train(training_data[1], training_labels[1]);
-    // model.train_batch(training_data[4], training_labels[4]);
+    // model.train(training_data[1], training_labels[1]);
+    model.train_batch(training_data[4], training_labels[4]);
   }
 
   for (auto i = 0; i < 4; i++) {
@@ -54,9 +54,6 @@ int main() {
   }
   // test();
 }
-
-// TODO: implement a last_layer field for layers to include cost function
-// version of backprop for that one
 
 std::vector<LinearLayer*> layers;
 

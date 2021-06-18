@@ -47,6 +47,7 @@ Matrix LinearReluLayer::activate(Matrix input) {
 }
 
 Matrix LinearReluLayer::backprop(Matrix next_weights, Matrix next_error) {
+  // TODO: the last layer version
   error = (next_weights.transpose() * next_error).hadamard_product(d_relu(z));
 
   return error;

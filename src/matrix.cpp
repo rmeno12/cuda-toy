@@ -119,6 +119,18 @@ Matrix Matrix::operator*(Matrix rhs) {
   return out;
 }
 
+Matrix Matrix::operator+(float rhs) {
+  Matrix out(rows, cols);
+
+  for (auto i = 0; i < rows; i++) {
+    for (auto j = 0; j < cols; j++) {
+      out(i, j) = mat[i][j] - rhs;
+    }
+  }
+
+  return out;
+}
+
 Matrix Matrix::operator*(float rhs) {
   Matrix out(rows, cols);
 
@@ -170,6 +182,26 @@ Matrix Matrix::hadamard_product(Matrix rhs) {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       out(i, j) = mat[i][j] * rhs(i, j);
+      if (out(i, j) != out(i, j)) {
+        out(i, j) = std::numeric_limits<float>::infinity();
+      }
+    }
+  }
+
+  return out;
+}
+
+Matrix Matrix::hadamard_quotient(Matrix rhs) {
+  if (rhs.rows != rows || rhs.cols != cols) {
+    throw std::invalid_argument(
+        "Matrices must be the same size to take Hadamard quotient.");
+  }
+
+  Matrix out(rows, cols);
+
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      out(i, j) = mat[i][j] / rhs(i, j);
       if (out(i, j) != out(i, j)) {
         out(i, j) = std::numeric_limits<float>::infinity();
       }

@@ -12,7 +12,7 @@ class LinearSigmoidLayer : public LinearLayer {
  public:
   LinearSigmoidLayer(size_t input_size, size_t size);
 
-  Matrix backprop(Matrix next_weights, Matrix next_error) override;
+  Matrix backprop(Matrix m1, Matrix m2) override;
 };
 
 #endif

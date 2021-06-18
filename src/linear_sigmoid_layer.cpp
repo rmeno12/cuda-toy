@@ -35,9 +35,14 @@ Matrix LinearSigmoidLayer::activate(Matrix input) {
   return out;
 }
 
-Matrix LinearSigmoidLayer::backprop(Matrix next_weights, Matrix next_error) {
-  error =
-      (next_weights.transpose() * next_error).hadamard_product(d_sigmoid(z));
+Matrix LinearSigmoidLayer::backprop(Matrix m1, Matrix m2) {
+  if (is_last_layer) {
+    error = ((m2 + -1).hadamard_quotient(m1 + -1) - m2.hadamard_quotient(m1))
+                .hadamard_product(d_sigmoid(z)) *
+            LOG2E;
+  } else {
+    error = (m1.transpose() * m2).hadamard_product(d_sigmoid(z));
+  }
 
   return error;
 }

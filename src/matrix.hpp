@@ -17,11 +17,13 @@ class Matrix {
   Matrix operator+(Matrix rhs);
   Matrix operator-(Matrix rhs);
   Matrix operator*(Matrix rhs);
+  Matrix operator+(float rhs);
   Matrix operator*(float rhs);
   float& operator()(size_t i, size_t j);
   float operator()(size_t i, size_t j) const;
   Matrix transpose();
   Matrix hadamard_product(Matrix rhs);
+  Matrix hadamard_quotient(Matrix rhs);
   Matrix collapse_horizontal_avg();
 
   void print();

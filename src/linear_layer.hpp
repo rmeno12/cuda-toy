@@ -1,7 +1,11 @@
 #ifndef LINEAR_LAYER_HPP
 #define LINEAR_LAYER_HPP
 
+#include <math.h>
+
 #include "matrix.hpp"
+
+const float LOG2E = std::log2(std::exp(1));
 
 class LinearLayer {
  private:
@@ -23,6 +27,7 @@ class LinearLayer {
   Matrix weights, biases;
   Matrix inp, z, error;
   size_t input_size, size;
+  bool is_last_layer;
 
  public:
   LinearLayer(size_t input_size, size_t size)
@@ -44,19 +49,15 @@ class LinearLayer {
   }
   virtual Matrix backprop(Matrix m1, Matrix m2) = 0;
   virtual void update_params(float learning_rate) {
-    weights = weights - (error * inp.transpose()) * learning_rate;
+    Matrix weight_update = (error * inp.transpose()) * learning_rate;
+    weights = weights - weight_update;
     biases = biases - error.collapse_horizontal_avg() * learning_rate;
-  }
-  virtual void update_params_batch(float learning_rate) {
-    Matrix collapsed = (error * inp.transpose()).collapse_horizontal_avg();
-    Matrix collapsed_error = error.collapse_horizontal_avg();
-
-    weights = weights - collapsed * learning_rate;
-    biases = biases - collapsed_error * learning_rate;
   }
 
   Matrix get_weights() { return weights; }
   Matrix get_error() { return error; }
+  bool get_is_last() { return is_last_layer; }
+  void set_is_last(bool is_last) { is_last_layer = is_last; }
 };
 
 #endif

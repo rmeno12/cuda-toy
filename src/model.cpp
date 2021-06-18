@@ -14,6 +14,7 @@ Model::Model(float learning_rate = 0.01) : learning_rate(learning_rate) {
   layers.push_back(new LinearSigmoidLayer(2, 2));
   layers.push_back(new LinearSigmoidLayer(2, 1));
   // layers.push_back(new LinearSoftmaxLayer(2, 2));
+  layers.back()->set_is_last(true);
 }
 
 Matrix Model::make_one_hot(Matrix input) {
@@ -61,12 +62,6 @@ void Model::backprop(Matrix preds, Matrix truths) {
 void Model::update_params() {
   for (auto layer : layers) {
     layer->update_params(learning_rate);
-  }
-}
-
-void Model::update_params_batch() {
-  for (auto layer : layers) {
-    layer->update_params_batch(learning_rate);
   }
 }
 
