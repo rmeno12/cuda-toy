@@ -27,7 +27,7 @@ class LinearLayer {
   Matrix weights, biases;
   Matrix inp, z, error;
   size_t input_size, size;
-  bool is_last_layer;
+  bool is_last_layer = false;
 
  public:
   LinearLayer(size_t input_size, size_t size)
