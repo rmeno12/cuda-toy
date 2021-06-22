@@ -11,8 +11,9 @@ Model::Model(float learning_rate = 0.01) : learning_rate(learning_rate) {
   // layers.push_back(new LinearReluLayer(784, 128));
   // layers.push_back(new LinearReluLayer(128, 64));
   // layers.push_back(new LinearSoftmaxLayer(64, 10));
-  layers.push_back(new LinearSigmoidLayer(2, 2));
-  layers.push_back(new LinearSigmoidLayer(2, 1));
+  layers.push_back(new LinearSigmoidLayer(2, 10));
+  layers.push_back(new LinearSigmoidLayer(10, 10));
+  layers.push_back(new LinearSigmoidLayer(10, 1));
   // layers.push_back(new LinearSoftmaxLayer(2, 2));
   layers.back()->set_is_last(true);
 }
@@ -77,22 +78,22 @@ Matrix Model::predict(Matrix input) {
 
 float Model::rmse(Matrix input, Matrix truths) {
   Matrix preds = predict(input);
-  // Matrix errs = (truths).hadamard_product(matrix_log(preds)) * -1.0;
-  // float sum = 0;
-  // for (auto i = 0; i < errs.get_rows(); i++) {
-  //   sum += errs(i, 0);
-  // }
-
-  // return sum;
-
-  Matrix errs = (truths - preds).hadamard_product(truths - preds);
-
+  Matrix errs = (truths).hadamard_product(matrix_log(preds)) * -1.0;
   float sum = 0;
   for (auto i = 0; i < errs.get_rows(); i++) {
-    sum += errs(i, 0) / errs.get_rows();
+    sum += errs(i, 0);
   }
 
-  return sqrt(sum);
+  return sum;
+
+  // Matrix errs = (truths - preds).hadamard_product(truths - preds);
+
+  // float sum = 0;
+  // for (auto i = 0; i < errs.get_rows(); i++) {
+  //   sum += errs(i, 0) / errs.get_rows();
+  // }
+
+  // return sqrt(sum);
 }
 
 void Model::train(Matrix input, Matrix truths) {

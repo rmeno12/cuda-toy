@@ -1,5 +1,6 @@
 #include <math.h>
 
+#include <fstream>
 #include <iostream>
 
 #include "linear_sigmoid_layer.hpp"
@@ -38,8 +39,8 @@ int main() {
 
   // single_sample();
   // stochastic();
-  // batch();
-  test();
+  batch();
+  // test();
 }
 
 void single_sample() {
@@ -83,16 +84,25 @@ void stochastic() {
 }
 
 void batch() {
-  float learning_rate = 0.5;
+  float learning_rate = 0.05;
   Model model(learning_rate);
+
+  for (auto i = 0; i < 4; i++) {
+    model.predict(training_data[i]).print();
+  }
 
   int iters = 500;
   for (int i = 0; i < iters; i++) {
-    if (i % 1 == 0) {
+    if (i % 10 == 0) {
       float avg = 0;
-      for (int j = 0; j < training_data.size(); j++) {
-        avg += model.rmse(training_data[j], training_labels[j]) /
-               training_data.size();
+      for (int j = 0; j < 4; j++) {
+        // avg += model.rmse(training_data[j], training_labels[j]) / 4;
+        Matrix preds = model.predict(training_data[j]);
+        Matrix err =
+            (training_labels[j] * -1.0) * (Model::matrix_log(preds)) -
+            ((training_labels[j] - Matrix({1}, 1, 1)) * -1.0) *
+                (Model::matrix_log((preds - Matrix({1}, 1, 1)) * -1.0));
+        avg += err(0, 0) / 4;
       }
       std::cout << "iter " << i << " cost " << avg << std::endl;
     }
@@ -107,6 +117,8 @@ void batch() {
 std::vector<LinearLayer*> layers;
 
 void test() {
+  std::ofstream outfile;
+  outfile.open("output.csv");
   LinearSigmoidLayer l1(2, 2);
   LinearSigmoidLayer l2(2, 1);
   l2.set_is_last(true);
@@ -126,6 +138,11 @@ void test() {
       prev = layer->feed_forward(prev);
     }
 
+    outfile << i;
+    for (auto j = 0; j < 4; j++) {
+      outfile << "," << prev(0, j);
+    }
+
     Matrix m1 = prev;
     Matrix m2 = truth;
     backprop(m1, m2);
@@ -137,7 +154,9 @@ void test() {
     for (auto i = 0; i < errs.get_rows(); i++) {
       sum += errs(i, 0) / errs.get_rows();
     }
-    std::cout << "err " << sqrt(sum) << std::endl;
+    outfile << "," << sqrt(sum);
+    outfile << "\n";
+    // std::cout << "err " << sqrt(sum) << std::endl;
   }
 
   ff1 = l1.feed_forward(input);

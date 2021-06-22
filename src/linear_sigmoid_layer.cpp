@@ -1,5 +1,6 @@
 #include "linear_sigmoid_layer.hpp"
 
+#include <chrono>
 #include <random>
 
 LinearSigmoidLayer::LinearSigmoidLayer(size_t input_size, size_t size)
@@ -9,7 +10,8 @@ LinearSigmoidLayer::LinearSigmoidLayer(size_t input_size, size_t size)
 
 // Using Xavier initialization
 void LinearSigmoidLayer::initialize_weights() {
-  std::default_random_engine gen;
+  std::default_random_engine gen(
+      std::chrono::system_clock::now().time_since_epoch().count());
   std::normal_distribution<float> dist(0.0, sqrtf32((size + input_size) / 2.0));
 
   for (auto i = 0; i < size; i++) {

@@ -11,7 +11,6 @@ class Model {
   float learning_rate;
 
   static Matrix make_one_hot(Matrix input);
-  static Matrix matrix_log(Matrix input);
   void backprop(Matrix preds, Matrix truths);
   void update_params();
 
@@ -22,6 +21,7 @@ class Model {
   float rmse(Matrix input, Matrix truths);
   void train(Matrix input, Matrix truths);
   void train_batch(Matrix input, Matrix truths);
+  static Matrix matrix_log(Matrix input);
 };
 
 #endif
