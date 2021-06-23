@@ -162,6 +162,18 @@ Matrix Matrix::operator*(float rhs) {
   return out;
 }
 
+Matrix Matrix::operator-() {
+  Matrix out(rows, cols);
+
+  for (auto i = 0; i < rows; i++) {
+    for (auto j = 0; j < cols; j++) {
+      out(i, j) = -mat[i][j];
+    }
+  }
+
+  return out;
+}
+
 Matrix Matrix::transpose() {
   Matrix out(cols, rows);
 
@@ -227,7 +239,7 @@ Matrix Matrix::mean(int axis) {
       for (auto i = 0; i < rows; i++) {
         avg += mat[i][j] / rows;
       }
-      out(j, 0) = avg;
+      out(0, j) = avg;
     }
   } else {
     for (auto i = 0; i < rows; i++) {

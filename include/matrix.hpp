@@ -22,6 +22,7 @@ class Matrix {
   Matrix operator*(Matrix rhs);
   Matrix operator+(float rhs);
   Matrix operator*(float rhs);
+  Matrix operator-();
   Matrix transpose();
   Matrix product(Matrix rhs);
   Matrix divide(Matrix rhs);
