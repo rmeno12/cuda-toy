@@ -14,17 +14,22 @@ class Matrix {
   Matrix(std::vector<float> vals, size_t rows, size_t cols);
   Matrix& operator=(const Matrix& rhs);
 
+  float& operator()(size_t i, size_t j);
+  float operator()(size_t i, size_t j) const;
+
   Matrix operator+(Matrix rhs);
   Matrix operator-(Matrix rhs);
   Matrix operator*(Matrix rhs);
   Matrix operator+(float rhs);
   Matrix operator*(float rhs);
-  float& operator()(size_t i, size_t j);
-  float operator()(size_t i, size_t j) const;
   Matrix transpose();
-  Matrix hadamard_product(Matrix rhs);
-  Matrix hadamard_quotient(Matrix rhs);
-  Matrix collapse_horizontal_avg();
+  Matrix product(Matrix rhs);
+  Matrix divide(Matrix rhs);
+
+  Matrix mean(int axis);
+  static Matrix maximum(Matrix lhs, float rhs);
+  static Matrix exp(Matrix input);
+  static Matrix log2(Matrix input);
 
   void print();
 
