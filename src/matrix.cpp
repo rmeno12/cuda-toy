@@ -75,50 +75,61 @@ float Matrix::operator()(size_t i, size_t j) const {
   return mat[i][j];
 }
 
-Matrix Matrix::operator+(Matrix rhs) {
+const Matrix Matrix::operator-() const {
+  Matrix out(rows, cols);
+
+  for (auto i = 0; i < rows; i++) {
+    for (auto j = 0; j < cols; j++) {
+      out(i, j) = -mat[i][j];
+    }
+  }
+
+  return out;
+}
+
+Matrix& Matrix::operator+=(const Matrix& rhs) {
   if (rhs.rows != rows) {
     throw std::invalid_argument(
-        "Matrices must either be the same size or have the same rows and the "
-        "second matrix have only one column to be added together.");
+        "Matrices must either be the same size to be added together.");
   }
-
-  // TODO: make this more efficient
-  bool expand = false;
-  if (rhs.cols != cols && rhs.cols == 1) {
-    expand = true;
-  } else if (rhs.cols != cols && rhs.cols != 1) {
-    throw;
-  }
-
-  Matrix out(rows, cols);
 
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] + rhs(i, expand ? 0 : j);
+      mat[i][j] += rhs(i, j);
     }
   }
 
-  return out;
+  return *this;
 }
 
-Matrix Matrix::operator-(Matrix rhs) {
-  if (rhs.rows != rows || rhs.cols != cols) {
+Matrix& Matrix::operator-=(const Matrix& rhs) {
+  if (rhs.rows != rows) {
     throw std::invalid_argument(
-        "Matrices must be the same size to be subtracted.");
+        "Matrices must either be the same size to be subtracted together.");
   }
-
-  Matrix out(rows, cols);
 
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] - rhs(i, j);
+      mat[i][j] -= rhs(i, j);
     }
   }
 
-  return out;
+  return *this;
 }
 
-Matrix Matrix::operator*(Matrix rhs) {
+const Matrix Matrix::operator+(const Matrix& rhs) const {
+  Matrix result = *this;
+  result += rhs;
+  return result;
+}
+
+const Matrix Matrix::operator-(const Matrix& rhs) const {
+  Matrix result = *this;
+  result -= rhs;
+  return result;
+}
+
+const Matrix Matrix::operator*(const Matrix& rhs) const {
   if (cols != rhs.rows) {
     throw std::invalid_argument(
         "Matrices must have the same inner dimensions (i.e. (a, b) * (b, c)");
@@ -138,55 +149,7 @@ Matrix Matrix::operator*(Matrix rhs) {
   return out;
 }
 
-Matrix Matrix::operator+(float rhs) {
-  Matrix out(rows, cols);
-
-  for (auto i = 0; i < rows; i++) {
-    for (auto j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] - rhs;
-    }
-  }
-
-  return out;
-}
-
-Matrix Matrix::operator*(float rhs) {
-  Matrix out(rows, cols);
-
-  for (auto i = 0; i < rows; i++) {
-    for (auto j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] * rhs;
-    }
-  }
-
-  return out;
-}
-
-Matrix Matrix::operator-() {
-  Matrix out(rows, cols);
-
-  for (auto i = 0; i < rows; i++) {
-    for (auto j = 0; j < cols; j++) {
-      out(i, j) = -mat[i][j];
-    }
-  }
-
-  return out;
-}
-
-Matrix Matrix::transpose() {
-  Matrix out(cols, rows);
-
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      out(j, i) = mat[i][j];
-    }
-  }
-
-  return out;
-}
-
-Matrix Matrix::product(Matrix rhs) {
+const Matrix Matrix::product(const Matrix& rhs) const {
   if (rhs.rows != rows || rhs.cols != cols) {
     throw std::invalid_argument(
         "Matrices must be the same size to perform elementwise "
@@ -204,7 +167,7 @@ Matrix Matrix::product(Matrix rhs) {
   return out;
 }
 
-Matrix Matrix::divide(Matrix rhs) {
+const Matrix Matrix::divide(const Matrix& rhs) const {
   if (rhs.rows != rows || rhs.cols != cols) {
     throw std::invalid_argument(
         "Matrices must be the same size to perform elementwise division.");
@@ -221,7 +184,83 @@ Matrix Matrix::divide(Matrix rhs) {
   return out;
 }
 
-Matrix Matrix::mean(int axis) {
+Matrix& Matrix::operator+=(const float& rhs) {
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      mat[i][j] += rhs;
+    }
+  }
+
+  return *this;
+}
+
+Matrix& Matrix::operator-=(const float& rhs) {
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      mat[i][j] -= rhs;
+    }
+  }
+
+  return *this;
+}
+
+Matrix& Matrix::operator*=(const float& rhs) {
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      mat[i][j] *= rhs;
+    }
+  }
+
+  return *this;
+}
+
+Matrix& Matrix::operator/=(const float& rhs) {
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      mat[i][j] /= rhs;
+    }
+  }
+
+  return *this;
+}
+
+const Matrix Matrix::operator+(const float& rhs) const {
+  Matrix result = *this;
+  result += rhs;
+  return result;
+}
+
+const Matrix Matrix::operator-(const float& rhs) const {
+  Matrix result = *this;
+  result -= rhs;
+  return result;
+}
+
+const Matrix Matrix::operator*(const float& rhs) const {
+  Matrix result = *this;
+  result *= rhs;
+  return result;
+}
+
+const Matrix Matrix::operator/(const float& rhs) const {
+  Matrix result = *this;
+  result /= rhs;
+  return result;
+}
+
+const Matrix Matrix::transpose() const {
+  Matrix out(cols, rows);
+
+  for (size_t i = 0; i < rows; i++) {
+    for (size_t j = 0; j < cols; j++) {
+      out(j, i) = mat[i][j];
+    }
+  }
+
+  return out;
+}
+
+const Matrix Matrix::mean(const int& axis) const {
   Matrix* tmp;
   if (axis == 0) {
     tmp = new Matrix(1, cols);
@@ -254,7 +293,7 @@ Matrix Matrix::mean(int axis) {
   return out;
 }
 
-Matrix Matrix::maximum(Matrix lhs, float rhs) {
+const Matrix Matrix::maximum(const Matrix& lhs, const float& rhs) {
   int rows = lhs.get_rows();
   int cols = lhs.get_cols();
   Matrix out(rows, cols);
@@ -268,7 +307,7 @@ Matrix Matrix::maximum(Matrix lhs, float rhs) {
   return out;
 }
 
-Matrix Matrix::exp(Matrix input) {
+const Matrix Matrix::exp(const Matrix& input) {
   int rows = input.get_rows();
   int cols = input.get_cols();
   Matrix out(rows, cols);
@@ -282,7 +321,7 @@ Matrix Matrix::exp(Matrix input) {
   return out;
 }
 
-Matrix Matrix::log2(Matrix input) {
+const Matrix Matrix::log2(const Matrix& input) {
   int rows = input.get_rows();
   int cols = input.get_cols();
   Matrix out(rows, cols);
@@ -296,7 +335,7 @@ Matrix Matrix::log2(Matrix input) {
   return out;
 }
 
-void Matrix::print() {
+void Matrix::print() const {
   std::cout << "{ ";
   for (auto i = 0; i < rows; i++) {
     if (i > 0) {
@@ -314,6 +353,30 @@ void Matrix::print() {
   std::cout << " }\n\n";
 }
 
-size_t Matrix::get_rows() { return rows; }
+const size_t Matrix::get_rows() const { return rows; }
 
-size_t Matrix::get_cols() { return cols; }
+const size_t Matrix::get_cols() const { return cols; }
+
+const Matrix operator+(const float& lhs, const Matrix& rhs) {
+  return rhs + lhs;
+}
+
+const Matrix operator-(const float& lhs, const Matrix& rhs) {
+  return -rhs + lhs;
+}
+
+const Matrix operator*(const float& lhs, const Matrix& rhs) {
+  return rhs * lhs;
+}
+
+const Matrix operator/(const float& lhs, const Matrix& rhs) {
+  Matrix out(rhs.get_rows(), rhs.get_cols());
+
+  for (auto i = 0; i < rhs.get_rows(); i++) {
+    for (auto j = 0; j < rhs.get_cols(); j++) {
+      out(i, j) = lhs / rhs(i, j);
+    }
+  }
+
+  return out;
+}

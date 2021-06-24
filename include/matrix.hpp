@@ -18,25 +18,42 @@ class Matrix {
   float& operator()(size_t i, size_t j);
   float operator()(size_t i, size_t j) const;
 
-  Matrix operator+(Matrix rhs);
-  Matrix operator-(Matrix rhs);
-  Matrix operator*(Matrix rhs);
-  Matrix operator+(float rhs);
-  Matrix operator*(float rhs);
-  Matrix operator-();
-  Matrix transpose();
-  Matrix product(Matrix rhs);
-  Matrix divide(Matrix rhs);
+  const Matrix operator-() const;
 
-  Matrix mean(int axis);
-  static Matrix maximum(Matrix lhs, float rhs);
-  static Matrix exp(Matrix input);
-  static Matrix log2(Matrix input);
+  Matrix& operator+=(const Matrix& rhs);
+  Matrix& operator-=(const Matrix& rhs);
 
-  void print();
+  const Matrix operator+(const Matrix& rhs) const;
+  const Matrix operator-(const Matrix& rhs) const;
+  const Matrix operator*(const Matrix& rhs) const;
+  const Matrix product(const Matrix& rhs) const;
+  const Matrix divide(const Matrix& rhs) const;
 
-  size_t get_rows();
-  size_t get_cols();
+  Matrix& operator+=(const float& rhs);
+  Matrix& operator-=(const float& rhs);
+  Matrix& operator*=(const float& rhs);
+  Matrix& operator/=(const float& rhs);
+
+  const Matrix operator+(const float& rhs) const;
+  const Matrix operator-(const float& rhs) const;
+  const Matrix operator*(const float& rhs) const;
+  const Matrix operator/(const float& rhs) const;
+
+  const Matrix transpose() const;
+  const Matrix mean(const int& axis) const;
+  static const Matrix maximum(const Matrix& lhs, const float& rhs);
+  static const Matrix exp(const Matrix& input);
+  static const Matrix log2(const Matrix& input);
+
+  void print() const;
+
+  const size_t get_rows() const;
+  const size_t get_cols() const;
 };
+
+const Matrix operator+(const float& lhs, const Matrix& rhs);
+const Matrix operator-(const float& lhs, const Matrix& rhs);
+const Matrix operator*(const float& lhs, const Matrix& rhs);
+const Matrix operator/(const float& lhs, const Matrix& rhs);
 
 #endif
