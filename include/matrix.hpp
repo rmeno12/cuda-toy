@@ -1,11 +1,12 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include <valarray>
 #include <vector>
 
 class Matrix {
  private:
-  std::vector<std::vector<float>> mat;
+  std::valarray<std::valarray<float>> mat;
   size_t rows, cols;
 
  public:
