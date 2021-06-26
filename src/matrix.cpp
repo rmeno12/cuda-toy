@@ -90,12 +90,14 @@ const Matrix Matrix::operator-() const {
 Matrix& Matrix::operator+=(const Matrix& rhs) {
   if (rhs.rows != rows) {
     throw std::invalid_argument(
-        "Matrices must either be the same size to be added together.");
+        "Matrices must be the same size to be added together.");
   }
+
+  bool broadcast = rhs.cols == 1;
 
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
-      mat[i][j] += rhs(i, j);
+      mat[i][j] += broadcast ? rhs(i, 0) : rhs(i, j);
     }
   }
 
@@ -314,7 +316,7 @@ const Matrix Matrix::exp(const Matrix& input) {
 
   for (auto i = 0; i < rows; i++) {
     for (auto j = 0; j < cols; j++) {
-      out(i, j) = std::exp(out(i, j));
+      out(i, j) = std::exp(input(i, j));
     }
   }
 
@@ -328,7 +330,7 @@ const Matrix Matrix::log2(const Matrix& input) {
 
   for (auto i = 0; i < rows; i++) {
     for (auto j = 0; j < cols; j++) {
-      out(i, j) = std::log2f(out(i, j));
+      out(i, j) = std::log2f(input(i, j));
     }
   }
 
