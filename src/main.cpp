@@ -16,7 +16,7 @@ Matrix sigmoid(Matrix input) {
 
 Matrix d_sigmoid(Matrix input) {
   Matrix sig = sigmoid(input);
-  return sig.product(-sig + 1.0);
+  return sig.product(-sig - 1.0);
 }
 
 Matrix relu(Matrix input) { return Matrix::maximum(input, 0); }
@@ -68,10 +68,10 @@ Matrix* forward_backward(Matrix x, Matrix y) {
   Matrix a2 = sigmoid(z2);
 
   Matrix loss =
-      (-y).product(Matrix::log2(a2)) - (-y + 1).product(Matrix::log2(-a2 + 1));
+      (-y).product(Matrix::log2(a2)) - (-y - 1).product(Matrix::log2(-a2 - 1));
 
   // backward pass
-  Matrix dl_da2 = (-y + 1).divide(-a2 + 1) - y.divide(a2);
+  Matrix dl_da2 = (-y - 1).divide(-a2 - 1) - y.divide(a2);
   Matrix da2_dz2 = d_sigmoid(z2);
   Matrix dl_dz2 = dl_da2.product(da2_dz2);
 
