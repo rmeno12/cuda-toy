@@ -1,5 +1,6 @@
 #include <random>
 
+#include "linear_relu_layer.hpp"
 #include "matrix.hpp"
 
 Matrix sigmoid(Matrix input) {
@@ -55,15 +56,13 @@ float learning_rate = 0.03;
 int x_size = 2;
 int l1_size = 10;
 int l2_size = 1;
-Matrix w1 = init_weights(x_size, l1_size);
-Matrix b1 = Matrix(l1_size, 1);
+LinearReluLayer l1(x_size, l1_size);
 Matrix w2 = init_weights(l1_size, l2_size);
 Matrix b2 = Matrix(l2_size, 1);
 
 Matrix* forward_backward(Matrix x, Matrix y) {
   // forward pass
-  Matrix z1 = w1 * x + b1;
-  Matrix a1 = relu(z1);
+  Matrix a1 = l1.forward(x);
   Matrix z2 = w2 * a1 + b2;
   Matrix a2 = sigmoid(z2);
 
@@ -75,9 +74,7 @@ Matrix* forward_backward(Matrix x, Matrix y) {
   Matrix da2_dz2 = d_sigmoid(z2);
   Matrix dl_dz2 = dl_da2.product(da2_dz2);
 
-  Matrix dl_da1 = w2.transpose() * dl_dz2;
-  Matrix da1_dz1 = d_relu(z1);
-  Matrix dl_dz1 = dl_da1.product(da1_dz1);
+  Matrix dl_dz1 = l1.backward(w2, dl_dz2);
 
   Matrix dl_dw2 = dl_dz2 * a1.transpose();
   Matrix dl_db2 = dl_dz2.mean(1);
@@ -88,8 +85,7 @@ Matrix* forward_backward(Matrix x, Matrix y) {
 }
 
 Matrix predict(Matrix x) {
-  Matrix z1 = w1 * x + b1;
-  Matrix a1 = relu(z1);
+  Matrix a1 = l1.forward(x);
   Matrix z2 = w2 * a1 + b2;
   Matrix a2 = sigmoid(z2);
 
@@ -105,8 +101,7 @@ int main() {
     Matrix y = Y;
     Matrix* results = forward_backward(x, y);
 
-    w1 = w1 - results[1] * learning_rate;
-    b1 = b1 - results[2] * learning_rate;
+    l1.update_params(learning_rate);
     w2 = w2 - results[3] * learning_rate;
     b2 = b2 - results[4] * learning_rate;
 
