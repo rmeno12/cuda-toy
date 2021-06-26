@@ -35,7 +35,7 @@ class LinearLayer {
     a = activate(z);
     return a;
   };
-  virtual const Matrix backward(const Matrix& input) = 0;
+  virtual const Matrix backward(const Matrix& m1, const Matrix& m2) = 0;
   virtual void update_params(const float& learning_rate) {
     weights -= learning_rate * (d_loss * x.transpose());
     biases -= learning_rate * d_loss.mean(1);

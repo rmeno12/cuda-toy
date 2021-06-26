@@ -1,6 +1,9 @@
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${cuda-toy_SOURCE_DIR}/include/*.hpp")
 
-add_library(cuda-toy-library matrix.cpp ${HEADER_LIST})
+add_library(cuda-toy-library 
+  matrix.cpp 
+  linear_relu_layer.cpp
+  ${HEADER_LIST})
 
 target_include_directories(cuda-toy-library PUBLIC ../include)
 
