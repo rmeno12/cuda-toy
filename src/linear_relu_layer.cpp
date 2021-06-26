@@ -45,12 +45,13 @@ const Matrix LinearReluLayer::d_activate(const Matrix& input) const {
 
 const Matrix LinearReluLayer::backward(const Matrix& m1, const Matrix& m2) {
   // TODO: last layer version
+  Matrix dl_da(1, 1);
   if (last_layer) {
   } else {
-    Matrix dl_da = m1.transpose() * m2;
-    Matrix da_dz = d_activate(z);
-    d_loss = dl_da.product(da_dz);
+    dl_da = m1.transpose() * m2;
   }
+  Matrix da_dz = d_activate(z);
+  d_loss = dl_da.product(da_dz);
 
   return d_loss;
 }
