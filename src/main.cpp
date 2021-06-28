@@ -25,11 +25,6 @@ Matrix forward_backward(Matrix x, Matrix y) {
   Matrix dl_dz2 = l2.backward(y, a2);
   Matrix dl_dz1 = l1.backward(l2.get_weights(), dl_dz2);
 
-  Matrix dl_dw2 = dl_dz2 * a1.transpose();
-  Matrix dl_db2 = dl_dz2.mean(1);
-  Matrix dl_dw1 = dl_dz1 * x.transpose();
-  Matrix dl_db1 = dl_dz1.mean(1);
-
   return loss;
 }
 
