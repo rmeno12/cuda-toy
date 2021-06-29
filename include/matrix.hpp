@@ -43,6 +43,7 @@ class Matrix {
   static const Matrix maximum(const Matrix& lhs, const float& rhs);
   static const Matrix exp(const Matrix& input);
   static const Matrix log2(const Matrix& input);
+  static const float sum(const Matrix& input);
 
   void print() const;
 
