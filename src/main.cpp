@@ -1,17 +1,20 @@
 #include "linear_relu_layer.hpp"
 #include "linear_sigmoid_layer.hpp"
+#include "linear_softmax_layer.hpp"
 #include "matrix.hpp"
 
 Matrix X({1, 1, 0, 0, 1, 0, 0, 1}, 2, 4);
-Matrix Y({0, 1, 0, 1}, 1, 4);
+// Matrix Y({0, 1, 0, 1}, 1, 4);
+Matrix Y({1, 0, 1, 0, 0, 1, 0, 1}, 2, 4);
 
 float learning_rate = 0.03;
 
 int x_size = 2;
 int l1_size = 10;
-int l2_size = 1;
+int l2_size = 2;
 LinearReluLayer l1(x_size, l1_size);
-LinearSigmoidLayer l2(l1_size, l2_size);
+// LinearSigmoidLayer l2(l1_size, l2_size);
+LinearSoftmaxLayer l2(l1_size, l2_size);
 
 Matrix forward_backward(Matrix x, Matrix y) {
   // forward pass
