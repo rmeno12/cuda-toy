@@ -322,6 +322,39 @@ const Matrix Matrix::mean(const int& axis) const {
   return out;
 }
 
+const Matrix Matrix::sum(const int& axis) const {
+  Matrix* tmp;
+  if (axis == 0) {
+    tmp = new Matrix(1, cols);
+  } else if (axis == 1) {
+    tmp = new Matrix(rows, 1);
+  } else {
+    throw std::invalid_argument("Axis must be 0 or 1.");
+  }
+  Matrix out = *tmp;
+  delete tmp;
+
+  if (axis == 0) {
+    for (auto j = 0; j < cols; j++) {
+      float sum = 0;
+      for (auto i = 0; i < rows; i++) {
+        sum += mat[i][j];
+      }
+      out(0, j) = sum;
+    }
+  } else {
+    for (auto i = 0; i < rows; i++) {
+      float sum = 0;
+      for (auto j = 0; j < cols; j++) {
+        sum += mat[i][j];
+      }
+      out(i, 0) = sum;
+    }
+  }
+
+  return out;
+}
+
 const Matrix Matrix::maximum(const Matrix& lhs, const float& rhs) {
   int rows = lhs.get_rows();
   int cols = lhs.get_cols();

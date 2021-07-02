@@ -42,6 +42,7 @@ class Matrix {
 
   const Matrix transpose() const;
   const Matrix mean(const int& axis) const;
+  const Matrix sum(const int& axis) const;
   static const Matrix maximum(const Matrix& lhs, const float& rhs);
   static const Matrix exp(const Matrix& input);
   static const Matrix log2(const Matrix& input);
