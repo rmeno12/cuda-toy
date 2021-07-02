@@ -170,6 +170,12 @@ const Matrix Matrix::operator*(const Matrix& rhs) const {
     for (size_t j = 0; j < rhs.cols; j++) {
       out(i, j) = 0;
       for (size_t k = 0; k < cols; k++) {
+        float x = mat[i][k];
+        float y = rhs(k, j);
+        float to_add = mat[i][k] * rhs(k, j);
+        if (std::isnan(to_add)) {
+          throw;
+        }
         out(i, j) += mat[i][k] * rhs(k, j);
       }
     }
@@ -376,7 +382,8 @@ const Matrix Matrix::exp(const Matrix& input) {
 
   for (auto i = 0; i < rows; i++) {
     for (auto j = 0; j < cols; j++) {
-      out(i, j) = std::exp(input(i, j));
+      out(i, j) =
+          std::min(std::numeric_limits<float>().max(), std::exp(input(i, j)));
     }
   }
 
@@ -390,7 +397,8 @@ const Matrix Matrix::log2(const Matrix& input) {
 
   for (auto i = 0; i < rows; i++) {
     for (auto j = 0; j < cols; j++) {
-      out(i, j) = std::log2f(input(i, j));
+      out(i, j) =
+          std::log2f(std::max(std::numeric_limits<float>().min(), input(i, j)));
     }
   }
 

@@ -36,7 +36,7 @@ const Matrix LinearReluLayer::d_activate(const Matrix& input) const {
 
   for (auto i = 0; i < input.get_rows(); i++) {
     for (auto j = 0; j < input.get_cols(); j++) {
-      out(i, j) = out(i, j) > 0 ? 1.0 : 0.0;
+      out(i, j) = input(i, j) > 0 ? 1.0 : 0.0;
     }
   }
 

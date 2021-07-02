@@ -35,7 +35,7 @@ const Matrix LinearSoftmaxLayer::activate(const Matrix& input) const {
       sum += out(i, j);
     }
     for (auto i = 0; i < out.get_rows(); i++) {
-      out(i, j) /= sum;
+      out(i, j) /= std::max(std::numeric_limits<float>().min(), sum);
     }
   }
 
