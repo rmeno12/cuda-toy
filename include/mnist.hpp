@@ -7,16 +7,18 @@
 
 #include "matrix.hpp"
 
+#define NUM_TRAINING 600
+#define NUM_TEST 100
+
 class Mnist {
  private:
-  std::vector<Matrix> training_images;
-  std::vector<Matrix> training_labels;
-  std::vector<Matrix> test_images;
-  std::vector<Matrix> test_labels;
+  Matrix* training_images[NUM_TRAINING];
+  Matrix* training_labels[NUM_TRAINING];
+  Matrix* test_images[NUM_TEST];
+  Matrix* test_labels[NUM_TEST];
 
   std::vector<char> read_bytes(std::string filename);
-  std::vector<Matrix> read_images(std::string filename);
-  std::vector<Matrix> read_labels(std::string filename);
+  void read_training(std::string filename);
 
  public:
   Mnist(std::string);
@@ -24,10 +26,7 @@ class Mnist {
   const std::tuple<Matrix, Matrix> get_training_batch(
       size_t batch_size = 64) const;
 
-  const std::vector<Matrix> get_training_images() const;
-  const std::vector<Matrix> get_training_labels() const;
-  const std::vector<Matrix> get_test_images() const;
-  const std::vector<Matrix> get_test_labels() const;
+  static void printImage(const Matrix& img);
 };
 
 #endif

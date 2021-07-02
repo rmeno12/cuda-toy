@@ -7,6 +7,6 @@ endif()
 project(cuda-toy LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg -std=c++17")
 
 add_subdirectory(src)
