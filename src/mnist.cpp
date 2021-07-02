@@ -4,13 +4,7 @@
 #include <iostream>
 #include <random>
 
-Mnist::Mnist(std::string data_folder) {
-  read_training(data_folder);
-  // training_images = read_images(data_folder + "/training_images");
-  // training_labels = read_labels(data_folder + "/training_labels");
-  // test_images = read_images(data_folder + "/test_images");
-  // test_labels = read_labels(data_folder + "/test_labels");
-}
+Mnist::Mnist(std::string data_folder) { read_training(data_folder); }
 
 void Mnist::read_training(std::string filename) {
   std::ifstream img_file;
@@ -25,7 +19,7 @@ void Mnist::read_training(std::string filename) {
     unsigned char* img = new unsigned char[784];
     img_file.read((char*)img, 784);
     for (auto j = 0; j < 784; j++) {
-      (*training_images[img_num])(j, 0) = img[j];
+      (*training_images[img_num])(j, 0) = ((float)img[j] - 33.31) / 78.567;
     }
     i += 784;
     img_num++;

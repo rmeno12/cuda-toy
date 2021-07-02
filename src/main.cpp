@@ -1,19 +1,18 @@
+#include <iostream>
+
 #include "linear_relu_layer.hpp"
 #include "linear_sigmoid_layer.hpp"
 #include "linear_softmax_layer.hpp"
 #include "matrix.hpp"
-
-Matrix X({1, 1, 0, 0, 1, 0, 0, 1}, 2, 4);
-// Matrix Y({0, 1, 0, 1}, 1, 4);
-Matrix Y({1, 0, 1, 0, 0, 1, 0, 1}, 2, 4);
+#include "mnist.hpp"
+#include "mnist_model.hpp"
 
 float learning_rate = 0.03;
 
-int x_size = 2;
-int l1_size = 10;
-int l2_size = 2;
+int x_size = 784;
+int l1_size = 128;
+int l2_size = 10;
 LinearReluLayer l1(x_size, l1_size);
-// LinearSigmoidLayer l2(l1_size, l2_size);
 LinearSoftmaxLayer l2(l1_size, l2_size);
 
 Matrix forward_backward(Matrix x, Matrix y) {
@@ -21,8 +20,7 @@ Matrix forward_backward(Matrix x, Matrix y) {
   Matrix a1 = l1.forward(x);
   Matrix a2 = l2.forward(a1);
 
-  Matrix loss =
-      (-y).product(Matrix::log2(a2)) - (-y - 1).product(Matrix::log2(-a2 - 1));
+  Matrix loss = -(y.product(Matrix::log2(a2)).sum(0));
 
   // backward pass
   Matrix dl_dz2 = l2.backward(y, a2);
@@ -38,21 +36,41 @@ Matrix predict(Matrix x) {
   return a2;
 }
 
-int main() {
+void manual_layers() {
   l2.set_last_layer(true);
-  predict(X).print();
-  std::vector<float> losses;
+  Mnist mnist("/workspaces/cuda-toy/data");
 
-  for (auto i = 0; i < 10000; i++) {
-    Matrix x = X;
-    Matrix y = Y;
+  for (auto i = 0; i < 10; i++) {
+    auto [x, y] = mnist.get_training_batch();
+    // Mnist::printImage(x);
     Matrix loss = forward_backward(x, y);
+    loss.print();
 
     l1.update_params(learning_rate);
     l2.update_params(learning_rate);
-
-    losses.push_back(loss.mean(0)(0, 0));
   }
 
-  predict(X).print();
+  auto [x, y] = mnist.get_training_batch(1);
+  predict(x).print();
+  y.print();
+}
+
+int main() {
+  // manual_layers();
+  Mnist mnist("/workspaces/cuda-toy/data");
+  std::cout << "read data" << std::endl;
+  MnistModel model;
+  std::vector<float> losses = {};
+
+  for (auto i = 0; i < 100; i++) {
+    auto [batch, truths] = mnist.get_training_batch();
+    Matrix loss = model.train(batch, truths);
+    float batch_loss = loss.mean(1)(0, 0);
+    std::cout << "loss: " << batch_loss << std::endl;
+    losses.push_back(batch_loss);
+  }
+
+  auto [batch, truths] = mnist.get_training_batch(4);
+  model.predict(batch).print();
+  truths.print();
 }

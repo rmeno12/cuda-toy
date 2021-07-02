@@ -9,6 +9,7 @@ MnistModel::MnistModel() {
   int l2_size = 10;
   layers = {new LinearReluLayer(x_size, l1_size),
             new LinearSoftmaxLayer(l1_size, l2_size)};
+  layers.back()->set_last_layer(true);
   learning_rate = 0.01;
 }
 
@@ -28,7 +29,7 @@ const Matrix MnistModel::train(const Matrix& x, const Matrix& y) {
 
   Matrix m1 = y;
   Matrix m2 = yhat;
-  for (auto i = layers.size() - 1; i >= 0; i--) {
+  for (int i = layers.size() - 1; i >= 0; i--) {
     m2 = layers[i]->backward(m1, m2);
     m1 = layers[i]->get_weights();
   }
