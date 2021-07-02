@@ -2,6 +2,7 @@ file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${cuda-toy_SOURCE_DIR}/include/*.hpp")
 
 add_library(cuda-toy-library 
   matrix.cpp 
+  mnist.cpp
   linear_relu_layer.cpp
   linear_sigmoid_layer.cpp
   linear_softmax_layer.cpp

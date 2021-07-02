@@ -2,6 +2,7 @@
 #define MNIST_HPP
 
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "matrix.hpp"
@@ -20,10 +21,13 @@ class Mnist {
  public:
   Mnist(std::string);
 
-  std::vector<Matrix> get_training_images();
-  std::vector<Matrix> get_training_labels();
-  std::vector<Matrix> get_test_images();
-  std::vector<Matrix> get_test_labels();
+  const std::tuple<Matrix, Matrix> get_training_batch(
+      size_t batch_size = 64) const;
+
+  const std::vector<Matrix> get_training_images() const;
+  const std::vector<Matrix> get_training_labels() const;
+  const std::vector<Matrix> get_test_images() const;
+  const std::vector<Matrix> get_test_labels() const;
 };
 
 #endif

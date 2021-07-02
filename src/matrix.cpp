@@ -59,6 +59,33 @@ Matrix& Matrix::operator=(const Matrix& rhs) {
   return *this;
 }
 
+void Matrix::augment(const Matrix& other, int axis) {
+  if (axis != 0 && axis != 1)
+    throw std::invalid_argument("Axis must be either 0 or 1");
+
+  if (axis == 0) {
+    if (other.cols != cols)
+      throw std::invalid_argument(
+          "To augment on axis 0, both matrices must have the same number of "
+          "columns");
+    rows += other.rows;
+    for (auto row : other.mat) {
+      mat.push_back(row);
+    }
+  } else {
+    if (other.rows != rows)
+      throw std::invalid_argument(
+          "To augment on axis 1, both matrices must have the same number of "
+          "rows");
+    cols += other.cols;
+    for (auto i = 0; i < rows; i++) {
+      for (auto j = 0; j < other.cols; j++) {
+        mat[i].push_back(other.mat[i][j]);
+      }
+    }
+  }
+}
+
 float& Matrix::operator()(size_t i, size_t j) {
   if (i >= rows || j >= cols) {
     throw std::out_of_range("Trying to access matrix out of bounds");

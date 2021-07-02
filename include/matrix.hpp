@@ -14,6 +14,8 @@ class Matrix {
   Matrix(std::vector<float> vals, size_t rows, size_t cols);
   Matrix& operator=(const Matrix& rhs);
 
+  void augment(const Matrix& other, int axis);
+
   float& operator()(size_t i, size_t j);
   float operator()(size_t i, size_t j) const;
 
