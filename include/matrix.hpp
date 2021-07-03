@@ -5,13 +5,14 @@
 
 class Matrix {
  private:
-  std::vector<std::vector<float>> mat;
+  float** mat;
   size_t rows, cols;
 
  public:
   Matrix(size_t rows, size_t cols);
   Matrix(const Matrix& rhs);
   Matrix(std::vector<float> vals, size_t rows, size_t cols);
+  ~Matrix();
   Matrix& operator=(const Matrix& rhs);
 
   void augment(const Matrix& other, int axis);
