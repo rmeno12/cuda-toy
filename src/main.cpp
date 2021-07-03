@@ -90,6 +90,7 @@ int main() {
 
   auto [batch, truths] = mnist.get_training_batch(4);
   model.predict(batch).print();
+  // batch.print();
   truths.print();
   output(losses, times);
 }

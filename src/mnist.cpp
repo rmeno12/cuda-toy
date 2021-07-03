@@ -68,7 +68,7 @@ void Mnist::printImage(const Matrix& img) {
                                    '+', '*', '#', '%', '@'};
   std::string out = "";
   for (auto i = 0; i < img.get_rows(); i++) {
-    float val = img(i, 0);
+    float val = img(i, 0) * 78.569 + 33.31;
     int which = std::floor(val * 10.0 / 256.0);
     std::cout << scale[which];
     if ((i + 1) % 28 == 0) {

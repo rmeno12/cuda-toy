@@ -16,9 +16,15 @@ Matrix::Matrix(size_t rows, size_t cols) : rows(rows), cols(cols) {
 }
 
 Matrix::Matrix(const Matrix& rhs) {
-  mat = rhs.mat;
   rows = rhs.rows;
   cols = rhs.cols;
+  mat = new float*[rows];
+  for (auto i = 0; i < rows; i++) {
+    mat[i] = new float[cols];
+    for (auto j = 0; j < cols; j++) {
+      mat[i][j] = rhs.mat[i][j];
+    }
+  }
 }
 
 Matrix::Matrix(std::vector<float> vals, size_t rows, size_t cols)
@@ -81,7 +87,7 @@ void Matrix::augment(const Matrix& other, int axis) {
       if (i < rows - other.rows) {
         newmat[i] = mat[i];
       } else {
-        newmat[i] = other.mat[rows - i];
+        newmat[i] = other.mat[rows - i - 1];
       }
     }
     delete[] mat;
@@ -98,7 +104,7 @@ void Matrix::augment(const Matrix& other, int axis) {
         if (j < cols - other.cols) {
           newrow[j] = mat[i][j];
         } else {
-          newrow[j] = other.mat[i][cols - j];
+          newrow[j] = other.mat[i][cols - j - 1];
         }
       }
       delete[] mat[i];
@@ -191,12 +197,6 @@ const Matrix Matrix::operator*(const Matrix& rhs) const {
     for (size_t j = 0; j < rhs.cols; j++) {
       out(i, j) = 0;
       for (size_t k = 0; k < cols; k++) {
-        float x = mat[i][k];
-        float y = rhs(k, j);
-        float to_add = mat[i][k] * rhs(k, j);
-        if (std::isnan(to_add)) {
-          throw;
-        }
         out(i, j) += mat[i][k] * rhs(k, j);
       }
     }
