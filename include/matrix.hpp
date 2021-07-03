@@ -12,6 +12,7 @@ class Matrix {
   Matrix(size_t rows, size_t cols);
   Matrix(const Matrix& rhs);
   Matrix(std::vector<float> vals, size_t rows, size_t cols);
+  Matrix(float** vals, size_t rows, size_t cols);
   ~Matrix();
   Matrix& operator=(const Matrix& rhs);
 

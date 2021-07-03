@@ -43,11 +43,21 @@ Matrix::Matrix(std::vector<float> vals, size_t rows, size_t cols)
   mat = new float*[rows];
   mat[0] = new float[rows * cols];
   for (auto i = 0; i < rows; i++) {
-    if (i > 0) {
-      mat[i] = mat[i - 1] + cols;
-    }
+    if (i > 0) mat[i] = mat[i - 1] + cols;
     for (auto j = 0; j < cols; j++) {
       mat[i][j] = vals[i * cols + j];
+    }
+  }
+}
+
+Matrix::Matrix(float** vals, size_t rows, size_t cols)
+    : rows(rows), cols(cols) {
+  mat = new float*[rows];
+  mat[0] = new float[rows * cols];
+  for (auto i = 0; i < rows; i++) {
+    if (i > 0) mat[i] = mat[i - 1] + cols;
+    for (auto j = 0; j < cols; j++) {
+      mat[i][j] = vals[i][j];
     }
   }
 }
