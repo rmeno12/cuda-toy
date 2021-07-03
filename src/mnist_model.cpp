@@ -10,7 +10,7 @@ MnistModel::MnistModel() {
   layers = {new LinearReluLayer(x_size, l1_size),
             new LinearSoftmaxLayer(l1_size, l2_size)};
   layers.back()->set_last_layer(true);
-  learning_rate = 0.01;
+  learning_rate = 0.005;
 }
 
 const Matrix MnistModel::predict(const Matrix& x) {

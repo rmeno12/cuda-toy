@@ -1,3 +1,4 @@
+#include <chrono>
 #include <fstream>
 #include <iostream>
 
@@ -56,11 +57,11 @@ void manual_layers() {
   y.print();
 }
 
-void write_losses(std::vector<float> losses) {
+void output(std::vector<float> losses, std::vector<int> times) {
   std::ofstream outcsv;
   outcsv.open("output.csv");
-  for (auto loss : losses) {
-    outcsv << loss << "\n";
+  for (auto i = 0; i < losses.size(); i++) {
+    outcsv << losses[i] << "," << times[i] << "\n";
   }
   outcsv.close();
 }
@@ -71,17 +72,24 @@ int main() {
   std::cout << "read data" << std::endl;
   MnistModel model;
   std::vector<float> losses = {};
+  std::vector<int> times = {};
 
   for (auto i = 0; i < 500; i++) {
     auto [batch, truths] = mnist.get_training_batch();
+    auto starttime = std::chrono::high_resolution_clock::now();
     Matrix loss = model.train(batch, truths);
+    auto endtime = std::chrono::high_resolution_clock::now();
+    int batchtime = std::chrono::duration_cast<std::chrono::microseconds>(
+                        endtime - starttime)
+                        .count();
     float batch_loss = loss.mean(1)(0, 0);
     std::cout << "loss: " << batch_loss << std::endl;
     losses.push_back(batch_loss);
+    times.push_back(batchtime);
   }
 
   auto [batch, truths] = mnist.get_training_batch(4);
   model.predict(batch).print();
   truths.print();
-  write_losses(losses);
+  output(losses, times);
 }
