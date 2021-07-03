@@ -7,8 +7,11 @@
 
 Matrix::Matrix(size_t rows, size_t cols) : rows(rows), cols(cols) {
   mat = new float*[rows];
+  mat[0] = new float[rows * cols];
   for (auto i = 0; i < rows; i++) {
-    mat[i] = new float[cols];
+    if (i > 0) {
+      mat[i] = mat[i - 1] + cols;
+    }
     for (auto j = 0; j < cols; j++) {
       mat[i][j] = 0;
     }
@@ -19,8 +22,11 @@ Matrix::Matrix(const Matrix& rhs) {
   rows = rhs.rows;
   cols = rhs.cols;
   mat = new float*[rows];
+  mat[0] = new float[rows * cols];
   for (auto i = 0; i < rows; i++) {
-    mat[i] = new float[cols];
+    if (i > 0) {
+      mat[i] = mat[i - 1] + cols;
+    }
     for (auto j = 0; j < cols; j++) {
       mat[i][j] = rhs.mat[i][j];
     }
@@ -35,8 +41,11 @@ Matrix::Matrix(std::vector<float> vals, size_t rows, size_t cols)
   }
 
   mat = new float*[rows];
+  mat[0] = new float[rows * cols];
   for (auto i = 0; i < rows; i++) {
-    mat[i] = new float[cols];
+    if (i > 0) {
+      mat[i] = mat[i - 1] + cols;
+    }
     for (auto j = 0; j < cols; j++) {
       mat[i][j] = vals[i * cols + j];
     }
@@ -44,25 +53,24 @@ Matrix::Matrix(std::vector<float> vals, size_t rows, size_t cols)
 }
 
 Matrix::~Matrix() {
-  for (auto i = 0; i < rows; i++) {
-    delete[] mat[i];
-  }
+  delete[] mat[0];
   delete[] mat;
 }
 
 Matrix& Matrix::operator=(const Matrix& rhs) {
   if (this == &rhs) return *this;
 
-  for (auto i = 0; i < rows; i++) {
-    delete[] mat[i];
-  }
+  delete[] mat[0];
   delete[] mat;
 
   rows = rhs.rows;
   cols = rhs.cols;
   mat = new float*[rows];
+  mat[0] = new float[rows * cols];
   for (auto i = 0; i < rows; i++) {
-    mat[i] = new float[cols];
+    if (i > 0) {
+      mat[i] = mat[i - 1] + cols;
+    }
     for (auto j = 0; j < cols; j++) {
       mat[i][j] = rhs.mat[i][j];
     }
@@ -83,13 +91,18 @@ void Matrix::augment(const Matrix& other, int axis) {
           "columns");
     rows += other.rows;
     newmat = new float*[rows];
+    newmat[0] = new float[rows * cols];
     for (auto i = 0; i < rows; i++) {
-      if (i < rows - other.rows) {
-        newmat[i] = mat[i];
-      } else {
-        newmat[i] = other.mat[rows - i - 1];
+      if (i > 0) newmat[i] = newmat[i - 1] + cols;
+      for (auto j = 0; j < cols; j++) {
+        if (i < rows - other.rows) {
+          newmat[i][j] = mat[i][j];
+        } else {
+          newmat[i][j] = other.mat[rows - i - 1][j];
+        }
       }
     }
+    delete[] mat[0];
     delete[] mat;
     mat = newmat;
   } else {
@@ -98,18 +111,21 @@ void Matrix::augment(const Matrix& other, int axis) {
           "To augment on axis 1, both matrices must have the same number of "
           "rows");
     cols += other.cols;
+    newmat = new float*[rows];
+    newmat[0] = new float[rows * cols];
     for (auto i = 0; i < rows; i++) {
-      float* newrow = new float[cols];
+      if (i > 0) newmat[i] = newmat[i - 1] + cols;
       for (auto j = 0; j < cols; j++) {
         if (j < cols - other.cols) {
-          newrow[j] = mat[i][j];
+          newmat[i][j] = mat[i][j];
         } else {
-          newrow[j] = other.mat[i][cols - j - 1];
+          newmat[i][j] = other.mat[i][cols - j - 1];
         }
       }
-      delete[] mat[i];
-      mat[i] = newrow;
     }
+    delete[] mat[0];
+    delete[] mat;
+    mat = newmat;
   }
 }
 
