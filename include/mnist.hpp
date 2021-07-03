@@ -7,7 +7,7 @@
 
 #include "matrix.hpp"
 
-#define NUM_TRAINING 600
+#define NUM_TRAINING 10000
 #define NUM_TEST 100
 
 class Mnist {

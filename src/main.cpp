@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 
 #include "linear_relu_layer.hpp"
@@ -55,6 +56,15 @@ void manual_layers() {
   y.print();
 }
 
+void write_losses(std::vector<float> losses) {
+  std::ofstream outcsv;
+  outcsv.open("output.csv");
+  for (auto loss : losses) {
+    outcsv << loss << "\n";
+  }
+  outcsv.close();
+}
+
 int main() {
   // manual_layers();
   Mnist mnist("/workspaces/cuda-toy/data");
@@ -62,7 +72,7 @@ int main() {
   MnistModel model;
   std::vector<float> losses = {};
 
-  for (auto i = 0; i < 100; i++) {
+  for (auto i = 0; i < 500; i++) {
     auto [batch, truths] = mnist.get_training_batch();
     Matrix loss = model.train(batch, truths);
     float batch_loss = loss.mean(1)(0, 0);
@@ -73,4 +83,5 @@ int main() {
   auto [batch, truths] = mnist.get_training_batch(4);
   model.predict(batch).print();
   truths.print();
+  write_losses(losses);
 }
