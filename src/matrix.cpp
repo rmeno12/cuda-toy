@@ -426,7 +426,7 @@ const Matrix Matrix::log2(const Matrix& input) {
   return out;
 }
 
-const float Matrix::sum(const Matrix& input) {
+float Matrix::sum(const Matrix& input) {
   int rows = input.get_rows();
   int cols = input.get_cols();
   float sum = 0;
@@ -458,9 +458,9 @@ void Matrix::print() const {
   std::cout << " }\n\n";
 }
 
-const size_t Matrix::get_rows() const { return rows; }
+size_t Matrix::get_rows() const { return rows; }
 
-const size_t Matrix::get_cols() const { return cols; }
+size_t Matrix::get_cols() const { return cols; }
 
 const Matrix operator+(const float& lhs, const Matrix& rhs) {
   return rhs + lhs;
