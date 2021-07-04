@@ -6,7 +6,7 @@ __global__ void matmul_k(float* lhs, float* rhs, float* res, size_t rows,
   int col = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (row < rows && col < cols) {
-    int sum = 0;
+    float sum = 0;
     for (int i = 0; i < mid; i++) {
       sum += lhs[row * mid + i] * rhs[i * cols + col];
     }

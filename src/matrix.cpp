@@ -220,8 +220,10 @@ const Matrix Matrix::operator*(const Matrix& rhs) const {
   float** result = new float*[rows];
   result[0] = new float[rows * rhs.cols];
   for (auto i = 1; i < rows; i++) result[i] = result[i - 1] + rhs.cols;
+
   matmul_wrapper(mat[0], rhs.mat[0], result[0], rows, cols, rhs.cols);
   Matrix out(result, rows, rhs.cols);
+
   delete[] result[0];
   delete[] result;
 

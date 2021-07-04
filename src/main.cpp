@@ -17,7 +17,7 @@ int l2_size = 10;
 LinearReluLayer l1(x_size, l1_size);
 LinearSoftmaxLayer l2(l1_size, l2_size);
 
-Matrix forward_backward(Matrix x, Matrix y) {
+Matrix forward_backward(const Matrix& x, const Matrix& y) {
   // forward pass
   Matrix a1 = l1.forward(x);
   Matrix a2 = l2.forward(a1);
@@ -43,7 +43,7 @@ void manual_layers() {
   Mnist mnist("/workspaces/cuda-toy/data");
 
   for (auto i = 0; i < 10; i++) {
-    auto [x, y] = mnist.get_training_batch();
+    auto [x, y] = mnist.get_training_batch(64);
     // Mnist::printImage(x);
     Matrix loss = forward_backward(x, y);
     loss.print();
@@ -52,9 +52,9 @@ void manual_layers() {
     l2.update_params(learning_rate);
   }
 
-  auto [x, y] = mnist.get_training_batch(1);
-  predict(x).print();
-  y.print();
+  // auto [x, y] = mnist.get_training_batch(1);
+  // predict(x).print();
+  // y.print();
 }
 
 void output(std::vector<float> losses, std::vector<int> times) {
@@ -67,30 +67,30 @@ void output(std::vector<float> losses, std::vector<int> times) {
 }
 
 int main() {
-  // manual_layers();
-  Mnist mnist("/workspaces/cuda-toy/data");
-  std::cout << "read data" << std::endl;
-  MnistModel model;
-  std::vector<float> losses = {};
-  std::vector<int> times = {};
+  manual_layers();
+  // Mnist mnist("/workspaces/cuda-toy/data");
+  // std::cout << "read data" << std::endl;
+  // MnistModel model;
+  // std::vector<float> losses = {};
+  // std::vector<int> times = {};
 
-  for (auto i = 0; i < 500; i++) {
-    auto [batch, truths] = mnist.get_training_batch();
-    auto starttime = std::chrono::high_resolution_clock::now();
-    Matrix loss = model.train(batch, truths);
-    auto endtime = std::chrono::high_resolution_clock::now();
-    int batchtime = std::chrono::duration_cast<std::chrono::microseconds>(
-                        endtime - starttime)
-                        .count();
-    float batch_loss = loss.mean(1)(0, 0);
-    std::cout << "loss: " << batch_loss << std::endl;
-    losses.push_back(batch_loss);
-    times.push_back(batchtime);
-  }
+  // for (auto i = 0; i < 500; i++) {
+  //   auto [batch, truths] = mnist.get_training_batch();
+  //   auto starttime = std::chrono::high_resolution_clock::now();
+  //   Matrix loss = model.train(batch, truths);
+  //   auto endtime = std::chrono::high_resolution_clock::now();
+  //   int batchtime = std::chrono::duration_cast<std::chrono::microseconds>(
+  //                       endtime - starttime)
+  //                       .count();
+  //   float batch_loss = loss.mean(1)(0, 0);
+  //   std::cout << "loss: " << batch_loss << std::endl;
+  //   losses.push_back(batch_loss);
+  //   times.push_back(batchtime);
+  // }
 
-  auto [batch, truths] = mnist.get_training_batch(4);
-  model.predict(batch).print();
-  // batch.print();
-  truths.print();
-  output(losses, times);
+  // auto [batch, truths] = mnist.get_training_batch(4);
+  // model.predict(batch).print();
+  // // batch.print();
+  // truths.print();
+  // output(losses, times);
 }
