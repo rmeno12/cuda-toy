@@ -190,9 +190,11 @@ Matrix& Matrix::operator-=(const Matrix& rhs) {
         "Matrices must either be the same size to be subtracted together.");
   }
 
+  bool broadcast = rhs.cols == 1;
+
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
-      mat[i][j] -= rhs(i, j);
+      mat[i][j] -= broadcast ? rhs(i, 0) : rhs(i, j);
     }
   }
 
@@ -401,6 +403,39 @@ const Matrix Matrix::sum(int axis) const {
         sum += mat[i][j];
       }
       out(i, 0) = sum;
+    }
+  }
+
+  return out;
+}
+
+const Matrix Matrix::max(int axis) const {
+  Matrix* tmp;
+  if (axis == 0) {
+    tmp = new Matrix(1, cols);
+  } else if (axis == 1) {
+    tmp = new Matrix(rows, 1);
+  } else {
+    throw std::invalid_argument("Axis must be 0 or 1.");
+  }
+  Matrix out = *tmp;
+  delete tmp;
+
+  if (axis == 0) {
+    for (auto j = 0; j < cols; j++) {
+      float big = mat[0][j];
+      for (auto i = 0; i < rows; i++) {
+        big = std::max(big, mat[i][j]);
+      }
+      out(0, j) = big;
+    }
+  } else {
+    for (auto i = 0; i < rows; i++) {
+      float big = mat[i][0];
+      for (auto j = 0; j < cols; j++) {
+        big = std::max(big, mat[i][j]);
+      }
+      out(i, 0) = big;
     }
   }
 
