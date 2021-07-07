@@ -265,7 +265,7 @@ const Matrix Matrix::divide(const Matrix& rhs) const {
   return out;
 }
 
-Matrix& Matrix::operator+=(const float& rhs) {
+Matrix& Matrix::operator+=(float rhs) {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       mat[i][j] += rhs;
@@ -275,7 +275,7 @@ Matrix& Matrix::operator+=(const float& rhs) {
   return *this;
 }
 
-Matrix& Matrix::operator-=(const float& rhs) {
+Matrix& Matrix::operator-=(float rhs) {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       mat[i][j] -= rhs;
@@ -285,7 +285,7 @@ Matrix& Matrix::operator-=(const float& rhs) {
   return *this;
 }
 
-Matrix& Matrix::operator*=(const float& rhs) {
+Matrix& Matrix::operator*=(float rhs) {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       mat[i][j] *= rhs;
@@ -295,7 +295,7 @@ Matrix& Matrix::operator*=(const float& rhs) {
   return *this;
 }
 
-Matrix& Matrix::operator/=(const float& rhs) {
+Matrix& Matrix::operator/=(float rhs) {
   for (size_t i = 0; i < rows; i++) {
     for (size_t j = 0; j < cols; j++) {
       mat[i][j] /= rhs;
@@ -305,25 +305,25 @@ Matrix& Matrix::operator/=(const float& rhs) {
   return *this;
 }
 
-const Matrix Matrix::operator+(const float& rhs) const {
+const Matrix Matrix::operator+(float rhs) const {
   Matrix result = *this;
   result += rhs;
   return result;
 }
 
-const Matrix Matrix::operator-(const float& rhs) const {
+const Matrix Matrix::operator-(float rhs) const {
   Matrix result = *this;
   result -= rhs;
   return result;
 }
 
-const Matrix Matrix::operator*(const float& rhs) const {
+const Matrix Matrix::operator*(float rhs) const {
   Matrix result = *this;
   result *= rhs;
   return result;
 }
 
-const Matrix Matrix::operator/(const float& rhs) const {
+const Matrix Matrix::operator/(float rhs) const {
   Matrix result = *this;
   result /= rhs;
   return result;
@@ -341,7 +341,7 @@ const Matrix Matrix::transpose() const {
   return out;
 }
 
-const Matrix Matrix::mean(const int& axis) const {
+const Matrix Matrix::mean(int axis) const {
   Matrix* tmp;
   if (axis == 0) {
     tmp = new Matrix(1, cols);
@@ -374,7 +374,7 @@ const Matrix Matrix::mean(const int& axis) const {
   return out;
 }
 
-const Matrix Matrix::sum(const int& axis) const {
+const Matrix Matrix::sum(int axis) const {
   Matrix* tmp;
   if (axis == 0) {
     tmp = new Matrix(1, cols);
@@ -407,7 +407,7 @@ const Matrix Matrix::sum(const int& axis) const {
   return out;
 }
 
-const Matrix Matrix::maximum(const Matrix& lhs, const float& rhs) {
+const Matrix Matrix::maximum(const Matrix& lhs, float rhs) {
   int rows = lhs.get_rows();
   int cols = lhs.get_cols();
   Matrix out(rows, cols);
@@ -487,19 +487,13 @@ size_t Matrix::get_rows() const { return rows; }
 
 size_t Matrix::get_cols() const { return cols; }
 
-const Matrix operator+(const float& lhs, const Matrix& rhs) {
-  return rhs + lhs;
-}
+const Matrix operator+(float lhs, const Matrix& rhs) { return rhs + lhs; }
 
-const Matrix operator-(const float& lhs, const Matrix& rhs) {
-  return -rhs + lhs;
-}
+const Matrix operator-(float lhs, const Matrix& rhs) { return -rhs + lhs; }
 
-const Matrix operator*(const float& lhs, const Matrix& rhs) {
-  return rhs * lhs;
-}
+const Matrix operator*(float lhs, const Matrix& rhs) { return rhs * lhs; }
 
-const Matrix operator/(const float& lhs, const Matrix& rhs) {
+const Matrix operator/(float lhs, const Matrix& rhs) {
   Matrix out(rhs.get_rows(), rhs.get_cols());
 
   for (auto i = 0; i < rhs.get_rows(); i++) {

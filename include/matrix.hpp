@@ -34,20 +34,20 @@ class Matrix {
   const Matrix product(const Matrix& rhs) const;
   const Matrix divide(const Matrix& rhs) const;
 
-  Matrix& operator+=(const float& rhs);
-  Matrix& operator-=(const float& rhs);
-  Matrix& operator*=(const float& rhs);
-  Matrix& operator/=(const float& rhs);
+  Matrix& operator+=(float rhs);
+  Matrix& operator-=(float rhs);
+  Matrix& operator*=(float rhs);
+  Matrix& operator/=(float rhs);
 
-  const Matrix operator+(const float& rhs) const;
-  const Matrix operator-(const float& rhs) const;
-  const Matrix operator*(const float& rhs) const;
-  const Matrix operator/(const float& rhs) const;
+  const Matrix operator+(float rhs) const;
+  const Matrix operator-(float rhs) const;
+  const Matrix operator*(float rhs) const;
+  const Matrix operator/(float rhs) const;
 
   const Matrix transpose() const;
-  const Matrix mean(const int& axis) const;
-  const Matrix sum(const int& axis) const;
-  static const Matrix maximum(const Matrix& lhs, const float& rhs);
+  const Matrix mean(int axis) const;
+  const Matrix sum(int axis) const;
+  static const Matrix maximum(const Matrix& lhs, float rhs);
   static const Matrix exp(const Matrix& input);
   static const Matrix log2(const Matrix& input);
   static float sum(const Matrix& input);
@@ -58,10 +58,10 @@ class Matrix {
   size_t get_cols() const;
 };
 
-const Matrix operator+(const float& lhs, const Matrix& rhs);
-const Matrix operator-(const float& lhs, const Matrix& rhs);
-const Matrix operator*(const float& lhs, const Matrix& rhs);
-const Matrix operator/(const float& lhs, const Matrix& rhs);
+const Matrix operator+(float lhs, const Matrix& rhs);
+const Matrix operator-(float lhs, const Matrix& rhs);
+const Matrix operator*(float lhs, const Matrix& rhs);
+const Matrix operator/(float lhs, const Matrix& rhs);
 
 void matmul_wrapper(float* lhs, float* rhs, float* res, size_t rows, size_t mid,
                     size_t cols);
