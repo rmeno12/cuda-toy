@@ -28,7 +28,8 @@ void LinearSoftmaxLayer::init_biases() {
 }
 
 const Matrix LinearSoftmaxLayer::activate(const Matrix& input) const {
-  Matrix out = Matrix::exp(input);
+  Matrix out =
+      Matrix::exp((input.transpose() - input.max(0).transpose()).transpose());
   for (auto j = 0; j < out.get_cols(); j++) {
     float sum = 0;
     for (auto i = 0; i < out.get_rows(); i++) {
