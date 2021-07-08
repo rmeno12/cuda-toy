@@ -231,13 +231,8 @@ const Matrix Matrix::product(const Matrix& rhs) const {
         "multiplication.");
   }
 
-  Matrix out(rows, cols);
-
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] * rhs(i, j);
-    }
-  }
+  Matrix out = *this;
+  matprod_wrapper(out.mat[0], rhs.mat[0], rows, cols);
 
   return out;
 }
@@ -248,13 +243,8 @@ const Matrix Matrix::divide(const Matrix& rhs) const {
         "Matrices must be the same size to perform elementwise division.");
   }
 
-  Matrix out(rows, cols);
-
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      out(i, j) = mat[i][j] / rhs(i, j);
-    }
-  }
+  Matrix out = *this;
+  matdiv_wrapper(out.mat[0], rhs.mat[0], rows, cols);
 
   return out;
 }
@@ -272,21 +262,13 @@ Matrix& Matrix::operator-=(float rhs) {
 }
 
 Matrix& Matrix::operator*=(float rhs) {
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      mat[i][j] *= rhs;
-    }
-  }
+  matprodscal_wrapper(mat[0], rhs, rows, cols);
 
   return *this;
 }
 
 Matrix& Matrix::operator/=(float rhs) {
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      mat[i][j] /= rhs;
-    }
-  }
+  matdivscal_wrapper(mat[0], rhs, rows, cols);
 
   return *this;
 }

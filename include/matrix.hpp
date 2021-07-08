@@ -70,7 +70,12 @@ void matmul_wrapper(float* lhs, float* rhs, float* res, size_t rows, size_t mid,
                     size_t cols);
 void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols, bool sub,
                     bool broadcast);
+void matprod_wrapper(float* lhs, float* rhs, size_t rows, size_t cols);
+void matdiv_wrapper(float* lhs, float* rhs, size_t rows, size_t cols);
+
 void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols,
                         bool sub);
+void matprodscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols);
+void matdivscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols);
 
 #endif
