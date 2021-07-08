@@ -175,7 +175,7 @@ Matrix& Matrix::operator+=(const Matrix& rhs) {
 
   bool broadcast = rhs.cols == 1;
 
-  matadd_wrapper(mat[0], rhs.mat[0], rows, cols, broadcast);
+  matadd_wrapper(mat[0], rhs.mat[0], rows, cols, false, broadcast);
 
   return *this;
 }
@@ -188,11 +188,7 @@ Matrix& Matrix::operator-=(const Matrix& rhs) {
 
   bool broadcast = rhs.cols == 1;
 
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      mat[i][j] -= broadcast ? rhs(i, 0) : rhs(i, j);
-    }
-  }
+  matadd_wrapper(mat[0], rhs.mat[0], rows, cols, true, broadcast);
 
   return *this;
 }
@@ -264,21 +260,13 @@ const Matrix Matrix::divide(const Matrix& rhs) const {
 }
 
 Matrix& Matrix::operator+=(float rhs) {
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      mat[i][j] += rhs;
-    }
-  }
+  mataddscal_wrapper(mat[0], rhs, rows, cols, false);
 
   return *this;
 }
 
 Matrix& Matrix::operator-=(float rhs) {
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      mat[i][j] -= rhs;
-    }
-  }
+  mataddscal_wrapper(mat[0], rhs, rows, cols, true);
 
   return *this;
 }

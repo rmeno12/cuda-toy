@@ -68,8 +68,9 @@ const Matrix operator/(float lhs, const Matrix& rhs);
 
 void matmul_wrapper(float* lhs, float* rhs, float* res, size_t rows, size_t mid,
                     size_t cols);
-void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols,
+void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols, bool sub,
                     bool broadcast);
-void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols);
+void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols,
+                        bool sub);
 
 #endif

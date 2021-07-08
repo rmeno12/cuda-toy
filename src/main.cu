@@ -6,7 +6,7 @@ int main() {
 
   A.print();
   B.print();
-  (A + B).print();
-  (A + 1).print();
-  (2 + A).print();
+  (A - B).print();
+  (A - 1).print();
+  (2 - A).print();
 }

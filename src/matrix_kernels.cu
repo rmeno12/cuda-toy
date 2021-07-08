@@ -39,16 +39,17 @@ void matmul_wrapper(float* lhs, float* rhs, float* res, size_t rows, size_t mid,
 }
 
 __global__ void matadd_k(float* lhs, float* rhs, size_t rows, size_t cols,
-                         bool broadcast) {
+                         bool sub, bool broadcast) {
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   int col = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (row < rows && col < cols) {
-    lhs[row * cols + col] += broadcast ? rhs[row] : rhs[row * cols + col];
+    lhs[row * cols + col] +=
+        (sub ? -1 : 1) * (broadcast ? rhs[row] : rhs[row * cols + col]);
   }
 }
 
-void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols,
+void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols, bool sub,
                     bool broadcast) {
   float *d_l, *d_r;
   cudaMalloc(&d_l, sizeof(float) * rows * cols);
@@ -63,7 +64,7 @@ void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols,
   dim3 gridsize(grid_x, grid_y);
   dim3 blocksize(BLOCK_SIZE, BLOCK_SIZE);
 
-  matadd_k<<<gridsize, blocksize>>>(d_l, d_r, rows, cols, broadcast);
+  matadd_k<<<gridsize, blocksize>>>(d_l, d_r, rows, cols, sub, broadcast);
   cudaDeviceSynchronize();
 
   cudaMemcpy(lhs, d_l, sizeof(float) * rows * cols, cudaMemcpyDeviceToHost);
@@ -71,16 +72,18 @@ void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols,
   cudaFree(d_r);
 }
 
-__global__ void mataddscal_k(float* lhs, float rhs, size_t rows, size_t cols) {
+__global__ void mataddscal_k(float* lhs, float rhs, size_t rows, size_t cols,
+                             bool sub) {
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   int col = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (row < rows && col < cols) {
-    lhs[row * cols + col] += rhs;
+    lhs[row * cols + col] += (sub ? -1 : 1) * rhs;
   }
 }
 
-void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols) {
+void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols,
+                        bool sub) {
   float* d_l;
   cudaMalloc(&d_l, sizeof(float) * rows * cols);
 
@@ -91,7 +94,7 @@ void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols) {
   dim3 gridsize(grid_x, grid_y);
   dim3 blocksize(BLOCK_SIZE, BLOCK_SIZE);
 
-  mataddscal_k<<<gridsize, blocksize>>>(d_l, rhs, rows, cols);
+  mataddscal_k<<<gridsize, blocksize>>>(d_l, rhs, rows, cols, sub);
   cudaDeviceSynchronize();
 
   cudaMemcpy(lhs, d_l, sizeof(float) * rows * cols, cudaMemcpyDeviceToHost);
