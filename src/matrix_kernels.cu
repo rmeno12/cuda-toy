@@ -70,3 +70,13 @@ __global__ void matdivscal_k(float* lhs, float rhs, size_t rows, size_t cols) {
     lhs[row * cols + col] /= rhs;
   }
 }
+
+__global__ void mattranspose_k(float* mat, float* res, size_t rows,
+                               size_t cols) {
+  int row = blockIdx.y * blockDim.y + threadIdx.y;
+  int col = blockIdx.x * blockDim.x + threadIdx.x;
+
+  if (row < rows && col < cols) {
+    res[row * cols + col] = mat[col * rows + row];
+  }
+}

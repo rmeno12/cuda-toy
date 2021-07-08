@@ -78,4 +78,6 @@ void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols,
 void matprodscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols);
 void matdivscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols);
 
+void mattranspose_wrapper(float* mat, float* res, size_t rows, size_t cols);
+
 #endif

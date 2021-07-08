@@ -144,3 +144,24 @@ void matdivscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols) {
   cudaMemcpy(lhs, d_l, sizeof(float) * rows * cols, cudaMemcpyDeviceToHost);
   cudaFree(d_l);
 }
+
+void mattranspose_wrapper(float* mat, float* res, size_t rows, size_t cols) {
+  float *d_mat, *d_res;
+  cudaMalloc(&d_mat, sizeof(float) * rows * cols);
+  cudaMalloc(&d_res, sizeof(float) * rows * cols);
+
+  cudaMemcpy(d_mat, mat, sizeof(float) * rows * cols, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_res, res, sizeof(float) * rows * cols, cudaMemcpyHostToDevice);
+
+  uint grid_x = (cols + BLOCK_SIZE - 1) / BLOCK_SIZE;
+  uint grid_y = (rows + BLOCK_SIZE - 1) / BLOCK_SIZE;
+  dim3 gridsize(grid_x, grid_y);
+  dim3 blocksize(BLOCK_SIZE, BLOCK_SIZE);
+
+  mattranspose_k<<<gridsize, blocksize>>>(d_mat, d_res, rows, cols);
+  cudaDeviceSynchronize();
+
+  cudaMemcpy(res, d_res, sizeof(float) * rows * cols, cudaMemcpyDeviceToHost);
+  cudaFree(d_mat);
+  cudaFree(d_res);
+}

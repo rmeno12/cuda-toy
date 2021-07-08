@@ -6,5 +6,6 @@ int main() {
 
   A.print();
   B.print();
-  A.product(B).print();
+  A.transpose().print();
+  B.transpose().print();
 }

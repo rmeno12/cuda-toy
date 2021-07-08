@@ -9,3 +9,6 @@ __global__ void mataddscal_k(float* lhs, float rhs, size_t rows, size_t cols,
                              bool sub);
 __global__ void matprodscal_k(float* lhs, float rhs, size_t rows, size_t cols);
 __global__ void matdivscal_k(float* lhs, float rhs, size_t rows, size_t cols);
+
+__global__ void mattranspose_k(float* mat, float* res, size_t rows,
+                               size_t cols);
