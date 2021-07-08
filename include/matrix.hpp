@@ -49,6 +49,7 @@ class Matrix {
   const Matrix sum(int axis) const;
   const Matrix max(int axis) const;
   const Matrix min(int axis) const;
+
   static const Matrix maximum(const Matrix& lhs, float rhs);
   static const Matrix exp(const Matrix& input);
   static const Matrix log2(const Matrix& input);
@@ -67,5 +68,8 @@ const Matrix operator/(float lhs, const Matrix& rhs);
 
 void matmul_wrapper(float* lhs, float* rhs, float* res, size_t rows, size_t mid,
                     size_t cols);
+void matadd_wrapper(float* lhs, float* rhs, size_t rows, size_t cols,
+                    bool broadcast);
+void mataddscal_wrapper(float* lhs, float rhs, size_t rows, size_t cols);
 
 #endif

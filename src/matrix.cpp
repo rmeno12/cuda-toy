@@ -175,11 +175,7 @@ Matrix& Matrix::operator+=(const Matrix& rhs) {
 
   bool broadcast = rhs.cols == 1;
 
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      mat[i][j] += broadcast ? rhs(i, 0) : rhs(i, j);
-    }
-  }
+  matadd_wrapper(mat[0], rhs.mat[0], rows, cols, broadcast);
 
   return *this;
 }
