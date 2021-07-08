@@ -452,20 +452,6 @@ const Matrix Matrix::log2(const Matrix& input) {
   return out;
 }
 
-float Matrix::sum(const Matrix& input) {
-  int rows = input.get_rows();
-  int cols = input.get_cols();
-  float sum = 0;
-
-  for (auto i = 0; i < rows; i++) {
-    for (auto j = 0; j < cols; j++) {
-      sum += input(i, j);
-    }
-  }
-
-  return sum;
-}
-
 void Matrix::print() const {
   std::cout << "{ ";
   for (auto i = 0; i < rows; i++) {
