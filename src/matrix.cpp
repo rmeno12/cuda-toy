@@ -300,11 +300,7 @@ const Matrix Matrix::operator/(float rhs) const {
 const Matrix Matrix::transpose() const {
   Matrix out(cols, rows);
 
-  for (size_t i = 0; i < rows; i++) {
-    for (size_t j = 0; j < cols; j++) {
-      out(j, i) = mat[i][j];
-    }
-  }
+  mattranspose_wrapper(mat[0], out.mat[0], cols, rows);
 
   return out;
 }
