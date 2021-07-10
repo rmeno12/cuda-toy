@@ -1,4 +1,4 @@
-file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${cuda-toy_SOURCE_DIR}/include/*.hpp")
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${cuda-toy_SOURCE_DIR}/include/*")
 
 add_library(cuda-toy-library 
   matrix.cpp 

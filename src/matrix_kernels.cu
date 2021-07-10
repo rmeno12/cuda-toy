@@ -1,4 +1,36 @@
 #include "matrix.hpp"
+#include "stdio.h"
+
+__global__ void augment_k(float* lhs, float* rhs, float* res, size_t lrows,
+                          size_t lcols, size_t rrows, size_t rcols, int axis) {
+  size_t rows, cols;
+  if (axis == 0) {
+    rows = lrows + rrows;
+    cols = lcols;
+  } else if (axis == 1) {
+    rows = lrows;
+    cols = lcols + rcols;
+  }
+
+  int row = blockIdx.y * blockDim.y + threadIdx.y;
+  int col = blockIdx.x * blockDim.x + threadIdx.x;
+
+  if (row < rows && col < cols) {
+    if (axis == 0) {
+      if (row < lrows) {
+        res[row * cols + col] = lhs[row * lcols + col];
+      } else {
+        res[row * cols + col] = rhs[(row - lrows) * rcols + col];
+      }
+    } else if (axis == 1) {
+      if (col < lcols) {
+        res[row * cols + col] = lhs[row * lcols + col];
+      } else {
+        res[row * cols + col] = rhs[row * rcols + (col - lcols)];
+      }
+    }
+  }
+}
 
 __global__ void matmul_k(float* lhs, float* rhs, float* res, size_t rows,
                          size_t mid, size_t cols) {

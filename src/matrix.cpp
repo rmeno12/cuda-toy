@@ -93,49 +93,35 @@ void Matrix::augment(const Matrix& other, int axis) {
   if (axis != 0 && axis != 1)
     throw std::invalid_argument("Axis must be either 0 or 1");
 
-  float** newmat;
+  float** res;
   if (axis == 0) {
     if (other.cols != cols)
       throw std::invalid_argument(
           "To augment on axis 0, both matrices must have the same number of "
           "columns");
-    rows += other.rows;
-    newmat = new float*[rows];
-    newmat[0] = new float[rows * cols];
-    for (auto i = 0; i < rows; i++) {
-      if (i > 0) newmat[i] = newmat[i - 1] + cols;
-      for (auto j = 0; j < cols; j++) {
-        if (i < rows - other.rows) {
-          newmat[i][j] = mat[i][j];
-        } else {
-          newmat[i][j] = other.mat[rows - i - 1][j];
-        }
-      }
-    }
+    res = new float*[rows + other.rows];
+    res[0] = new float[(rows + other.rows) * cols];
+    for (auto i = 1; i < rows + other.rows; i++) res[i] = res[i - 1] + cols;
+    augment_wrapper(mat[0], other.mat[0], res[0], rows, cols, other.rows,
+                    other.cols, 0);
     delete[] mat[0];
     delete[] mat;
-    mat = newmat;
-  } else {
+    mat = res;
+    rows += other.rows;
+  } else if (axis == 1) {
     if (other.rows != rows)
       throw std::invalid_argument(
           "To augment on axis 1, both matrices must have the same number of "
           "rows");
-    cols += other.cols;
-    newmat = new float*[rows];
-    newmat[0] = new float[rows * cols];
-    for (auto i = 0; i < rows; i++) {
-      if (i > 0) newmat[i] = newmat[i - 1] + cols;
-      for (auto j = 0; j < cols; j++) {
-        if (j < cols - other.cols) {
-          newmat[i][j] = mat[i][j];
-        } else {
-          newmat[i][j] = other.mat[i][cols - j - 1];
-        }
-      }
-    }
+    res = new float*[rows];
+    res[0] = new float[rows * (cols + other.cols)];
+    for (auto i = 1; i < rows; i++) res[i] = res[i - 1] + (cols + other.cols);
+    augment_wrapper(mat[0], other.mat[0], res[0], rows, cols, other.rows,
+                    other.cols, 1);
     delete[] mat[0];
     delete[] mat;
-    mat = newmat;
+    mat = res;
+    cols += other.cols;
   }
 }
 
