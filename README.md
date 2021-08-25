@@ -1,5 +1,8 @@
 # cuda-toy
 
+Check out the [write up](https://rmeno12.github.io/cuda-toy/) of this project.
+
+
 The goal of this project is to implement a simple neural network in C++ that is GPU accelerated via CUDA.
 
 ### Goals
