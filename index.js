@@ -1,0 +1,1 @@
+window.location.replace("https://rmeno12.github.io/projects/cuda-toy/");
